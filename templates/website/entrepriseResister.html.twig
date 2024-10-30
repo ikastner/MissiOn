@@ -1,0 +1,17 @@
+{% extends 'base.html.twig' %}
+
+{% block title %}Inscription Entreprise{% endblock %}
+
+{% block body %}
+    <h1>Inscription Entreprise</h1>
+
+    {{ form_start(form) }}
+        {{ form_widget(form) }}
+        <button type="submit">S'inscrire</button>
+    {{ form_end(form) }}
+
+    <p>
+        Déjà inscrit ? <a href="{{ path('app_login') }}">Se connecter</a>
+    </p> 
+{% endblock %}
+
