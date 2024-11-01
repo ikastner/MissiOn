@@ -16,5 +16,5 @@ registration_freelance:
 registration_gestionnaire:
     path: /register/gestionnaire  # URL pour l'inscription des gestionnaires
     controller: App\Controller\RegistrationController::register
-    defaults: { type: 'gestionnaire', role:  }  # Définit un paramètre 'type' pour le contrôleur
+    defaults: { type: 'gestionnaire'}  # Définit un paramètre 'type' pour le contrôleur
 
