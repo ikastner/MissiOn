@@ -37,6 +37,12 @@ class User implements UserInterface, PasswordAuthenticatedUserInterface
     #[ORM\Column]
     private ?string $password = null;
 
+    #[ORM\OneToOne(targetEntity: Gestionnaire::class, inversedBy: 'user', cascade: ['persist', 'remove'])]
+    private ?Gestionnaire $gestionnaire = null;
+
+    #[ORM\OneToOne(targetEntity: Personel::class, inversedBy: 'user', cascade: ['persist', 'remove'])]
+    private ?Personel $personel = null;
+
     public function getId(): ?int
     {
         return $this->id;
@@ -83,6 +89,22 @@ class User implements UserInterface, PasswordAuthenticatedUserInterface
     public function getRoles(): array
     {
         $roles = $this->roles;
+
+        // Associe les rôles en fonction du type d'utilisateur
+        switch ($this->type) {
+            case 'freelance':
+                $roles[] = 'ROLE_FREELANCE';
+                break;
+            case 'personel':
+                $roles[] = 'ROLE_PERSONNEL';
+                break;
+            case 'gestionnaire':
+                $roles[] = 'ROLE_GESTIONNAIRE';
+                break;
+            default:
+                $roles[] = 'ROLE_USER';
+                break;
+        }
         // guarantee every user at least has ROLE_USER
         $roles[] = 'ROLE_USER';
 
@@ -111,6 +133,28 @@ class User implements UserInterface, PasswordAuthenticatedUserInterface
     {
         $this->password = $password;
 
+        return $this;
+    }
+
+    public function getGestionnaire(): ?Gestionnaire
+    {
+        return $this->gestionnaire;
+    }
+
+    public function setGestionnaire(?Gestionnaire $gestionnaire): static
+    {
+        $this->gestionnaire = $gestionnaire;
+        return $this;
+    }
+
+    public function getPersonel(): ?Personel
+    {
+        return $this->personel;
+    }
+
+    public function setPersonel(?Personel $personel): static
+    {
+        $this->personel = $personel;
         return $this;
     }
 

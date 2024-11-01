@@ -3,3 +3,18 @@ controllers:
         path: ../src/Controller/
         namespace: App\Controller
     type: attribute
+
+
+# J'ai séparé les routes par exemple si l'utilisateur click sur espace freelance pour s'inscrire 
+# la route regitration_freelance sera appelé le type par défaut sera freelance
+
+registration_freelance:
+    path: /register/freelance  # URL pour l'inscription des freelances
+    controller: App\Controller\RegistrationController::register
+    defaults: { type: 'freelance' }  # Définit un paramètre 'type' pour le contrôleur
+
+registration_gestionnaire:
+    path: /register/gestionnaire  # URL pour l'inscription des gestionnaires
+    controller: App\Controller\RegistrationController::register
+    defaults: { type: 'gestionnaire', role:  }  # Définit un paramètre 'type' pour le contrôleur
+

@@ -2,6 +2,7 @@
 
 namespace App\Security;
 
+use App\Entity\User;
 use Symfony\Component\HttpFoundation\RedirectResponse;
 use Symfony\Component\HttpFoundation\Request;
 use Symfony\Component\HttpFoundation\Response;
@@ -44,12 +45,28 @@ class UserAuthAuthenticator extends AbstractLoginFormAuthenticator
 
     public function onAuthenticationSuccess(Request $request, TokenInterface $token, string $firewallName): ?Response
     {
+        // récupération de l'utilisateur 
+        $user = $token->getUser();
+
         if ($targetPath = $this->getTargetPath($request->getSession(), $firewallName)) {
             return new RedirectResponse($targetPath);
         }
 
-        // For example:
-        return new RedirectResponse($this->urlGenerator->generate('app_website'));
+        // Vérification du type d'utilisateur et redirection vers les view correspondant
+        if ($user instanceof User) {
+            switch ($user->getType()) {
+                case 'freelance':
+                    return new RedirectResponse($this->urlGenerator->generate('app_freelance_view'));
+                case 'gestionnaire':
+                    return new RedirectResponse($this->urlGenerator->generate('app_gestionnaire_view'));
+                // case 'personnel':
+                //     return new RedirectResponse(''); // Remplacez par votre route
+                // // default:
+                //     return new RedirectResponse('/default/dashboard'); // Route par défaut
+            }
+        }
+
+        // return new RedirectResponse($this->urlGenerator->generate('app_website'));
         // throw new \Exception('TODO: provide a valid redirect inside '.__FILE__);
     }
 

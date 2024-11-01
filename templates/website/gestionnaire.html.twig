@@ -11,7 +11,7 @@
 <div class="example-wrapper">
     {% if app.user %}
         <div class="mb-3">
-            Vous êtes connecter {{ app.user.userIdentifier }}, <a href="{{ path('app_logout') }}">Déconnecté</a>
+            Vous êtes connecter en tant que gestionnaire {{ app.user.userIdentifier }}, <a href="{{ path('app_logout') }}">Déconnecté</a>
         </div>
     {% endif %}
 
