@@ -33,6 +33,38 @@ class UserRepository extends ServiceEntityRepository implements PasswordUpgrader
         $this->getEntityManager()->flush();
     }
 
+    /**
+     * Recherche les utilisateurs avec un rôle spécifique
+     *
+     * @param string $role Le rôle à rechercher (ex: 'ROLE_GESTIONNAIRE')
+     * @return User[] Tableau d'objets User
+     */
+    public function findByRole(string $role): array
+    {
+        return $this->createQueryBuilder('u')
+            ->andWhere('u.roles LIKE :role')
+            ->setParameter('role', '%"'.$role.'"%')
+            ->getQuery()
+            ->getResult();
+    }
+
+
+        /**
+     * Recherche les utilisateurs par type
+     *
+     * @param string $type Le type d'utilisateur (ex: 'freelance', 'gestionnaire', 'personnel')
+     * @return User[] Tableau d'objets User
+     */
+    public function findByType(string $type): array
+    {
+        return $this->createQueryBuilder('u')
+            ->andWhere('u.type = :type')
+            ->setParameter('type', $type)
+            ->getQuery()
+            ->getResult();
+    }
+
+
     //    /**
     //     * @return User[] Returns an array of User objects
     //     */

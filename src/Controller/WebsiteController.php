@@ -15,4 +15,12 @@ class WebsiteController extends AbstractController
             'controller_name' => 'WebsiteController',
         ]);
     }
+
+    #[Route('/website/gestionnaire', name: 'app_gestionnaire_view')]
+    public function gestionnaire_view():Response {
+        return $this->render('website/gestionnaire.html.twig', [
+            'controller_name' => 'WebsiteController',
+        ]);
+    }
+
 }

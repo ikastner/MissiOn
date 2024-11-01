@@ -22,6 +22,9 @@ class Personel
     #[ORM\ManyToOne(inversedBy: 'personels')]
     private ?Entreprise $entreprise = null;
 
+    #[ORM\OneToOne(mappedBy: 'personnel', cascade: ['persist', 'remove'])]
+    private ?User $user = null;
+
     public function getId(): ?int
     {
         return $this->id;
@@ -60,6 +63,17 @@ class Personel
     {
         $this->entreprise = $entreprise;
 
+        return $this;
+    }
+
+    public function getUser(): ?User
+    {
+        return $this->user;
+    }
+
+    public function setUser(?User $user): static
+    {
+        $this->user = $user;
         return $this;
     }
 }

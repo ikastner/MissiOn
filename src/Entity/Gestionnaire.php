@@ -13,7 +13,7 @@ class Gestionnaire
     #[ORM\Column]
     private ?int $id = null;
 
-    #[ORM\Column(length: 255)]
+    #[ORM\Column(length: 255,  nullable: true)]
     private ?string $name = null;
 
     #[ORM\Column(length: 255)]
@@ -21,6 +21,9 @@ class Gestionnaire
 
     #[ORM\OneToOne(inversedBy: 'gestionnaire', cascade: ['persist', 'remove'])]
     private ?Entreprise $entreprise = null;
+
+    #[ORM\OneToOne(mappedBy: 'gestionnaire', cascade: ['persist', 'remove'])]
+    private ?User $user = null; // Association avec User
 
     public function getId(): ?int
     {
@@ -60,6 +63,17 @@ class Gestionnaire
     {
         $this->entreprise = $entreprise;
 
+        return $this;
+    }
+
+    public function getUser(): ?User
+    {
+        return $this->user;
+    }
+
+    public function setUser(?User $user): static
+    {
+        $this->user = $user;
         return $this;
     }
 }
