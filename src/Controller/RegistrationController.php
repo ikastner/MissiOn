@@ -8,11 +8,14 @@ use App\Entity\Personel;
 use App\Entity\User;
 use App\Form\RegistrationFormType;
 use App\Security\UserAuthAuthenticator;
+use App\Service\EmailService;
 use Doctrine\ORM\EntityManagerInterface;
 use Symfony\Bundle\FrameworkBundle\Controller\AbstractController;
 use Symfony\Bundle\SecurityBundle\Security;
 use Symfony\Component\HttpFoundation\Request;
 use Symfony\Component\HttpFoundation\Response;
+use Symfony\Component\Mailer\MailerInterface;
+use Symfony\Component\Mime\Email;
 use Symfony\Component\PasswordHasher\Hasher\UserPasswordHasherInterface;
 use Symfony\Component\Routing\Attribute\Route;
 use Symfony\Component\Security\Http\Authentication\UserAuthenticatorInterface;
@@ -25,7 +28,8 @@ class RegistrationController extends AbstractController
         UserPasswordHasherInterface $userPasswordHasher,
         UserAuthenticatorInterface $userAuthenticator,
         UserAuthAuthenticator $authenticator,
-        Security $security, EntityManagerInterface $entityManager): Response
+        Security $security, EntityManagerInterface $entityManager,
+        EmailService $mailer): Response
     {
         $user = new User();
         // Attribuer automatiquement le type d'utilisateur
@@ -96,30 +100,25 @@ class RegistrationController extends AbstractController
             $entityManager->persist($user);
             $entityManager->flush();
 
+            // Envoi de l'email
+            $mailer->sendEmail(
+                $userEmail,
+                'Création de compte',
+                'Votre compte a été crée avec succées'
+            );
+            // $email = (new Email())
+            // ->from('no-reply@mission.com')
+            // ->to($userEmail)
+            // ->subject('Bienvenue sur notre plateforme')
+            // ->text('Bienvenue ! Votre compte a été créé avec succès.');
+
+            // $mailer->send($email);
             // Connexion automatique et redirection
             $userAuthenticator->authenticateUser(
                 $user,
                 $authenticator,
                 $request
             );
-
-            // // Redirection en fonction du type d'utilisateur
-            // return match ($type) {
-            //     'gestionnaire' => $this->redirectToRoute('app_gestionnaire_view'),
-            //     'personel' => $this->redirectToRoute('app_personnel_view'),
-            //     default => $this->redirectToRoute('app_home')
-            // };
-            // switch ( $type ){
-            //     // case 'freelance':
-            //     //     return $this->redirectToRoute('app_freelance_view');
-            //     // break;
-            //     case 'gestionnaire':
-            //         return $this->redirectToRoute('app_gestionnaire_view');
-            //     break;
-            //     case 'personel':
-            //         return $this->redirectToRoute('app_personnel_view');
-            //     break;
-            // }
 
             // do anything else you need here, like send an email
 
