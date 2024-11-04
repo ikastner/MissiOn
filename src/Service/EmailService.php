@@ -18,7 +18,7 @@ class EmailService {
     {
         //Création et envoi de l'email
         $email = (new Email())
-        ->from('ousmane.nndome@gmail')
+        ->from('ousmane.nndome@gmail.com')
         ->to($to)
         ->subject($subjet)
         ->text($content);

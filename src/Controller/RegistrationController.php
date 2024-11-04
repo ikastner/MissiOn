@@ -103,8 +103,8 @@ class RegistrationController extends AbstractController
             // Envoi de l'email
             $mailer->sendEmail(
                 $userEmail,
-                'Création de compte',
-                'Votre compte a été crée avec succées'
+                'Création de votre compte',
+                'Bienvenue ! Votre compte a été créé avec succès. Vous pouvez désormais vous connecter et gérer les personnels de votre entreprise'
             );
             // $email = (new Email())
             // ->from('no-reply@mission.com')
