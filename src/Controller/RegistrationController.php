@@ -3,8 +3,9 @@
 namespace App\Controller;
 
 use App\Entity\Entreprise;
+use App\Entity\Freelance;
 use App\Entity\Gestionnaire;
-use App\Entity\Personel;
+use App\Entity\Personnel;
 use App\Entity\User;
 use App\Form\RegistrationFormType;
 use App\Security\UserAuthAuthenticator;
@@ -14,119 +15,99 @@ use Symfony\Bundle\FrameworkBundle\Controller\AbstractController;
 use Symfony\Bundle\SecurityBundle\Security;
 use Symfony\Component\HttpFoundation\Request;
 use Symfony\Component\HttpFoundation\Response;
-use Symfony\Component\Mailer\MailerInterface;
-use Symfony\Component\Mime\Email;
 use Symfony\Component\PasswordHasher\Hasher\UserPasswordHasherInterface;
 use Symfony\Component\Routing\Attribute\Route;
 use Symfony\Component\Security\Http\Authentication\UserAuthenticatorInterface;
 
 class RegistrationController extends AbstractController
 {
-    // #[Route('/register', name: 'app_register')] j'ai déjà définie les routes dans routes.yaml
-    public function register(Request $request, 
+    public function register(
+        Request $request,
         string $type,
         UserPasswordHasherInterface $userPasswordHasher,
         UserAuthenticatorInterface $userAuthenticator,
         UserAuthAuthenticator $authenticator,
-        Security $security, EntityManagerInterface $entityManager,
-        EmailService $mailer): Response
-    {
+        Security $security,
+        EntityManagerInterface $entityManager,
+        EmailService $emailService
+    ): Response {
         $user = new User();
-        // Attribuer automatiquement le type d'utilisateur
         $user->setType($type);
 
-        // Récupération des rôles basés sur le type
         $roles = $user->getRoles();
-        $user->setRoles($roles); // assigne lees roles en fontion des types
+        $user->setRoles($roles);
 
-        // Passez le type d'utilisateur dans les options du formulaire
         $form = $this->createForm(RegistrationFormType::class, $user, ['user_type' => $type]);
         $form->handleRequest($request);
 
         if ($form->isSubmitted() && $form->isValid()) {
-            /** @var string $plainPassword */
             $plainPassword = $form->get('plainPassword')->getData();
-
-            // récupération de l'email de l'utilisateur pour l'enregister soit dans freelance ou gestionnaire ou personnel
             $userEmail = $form->get('email')->getData();
 
-            // on l'enregistre en fonction des types 
             switch ($type) {
-                // case 'freelance':
-                //     $freelance = new Freelance();
-                //     // ajout d'email du freelancer
-                //     $freelance->setEmail($userEmail);
-                //     // Association du freelancer à l'utilisateur
-                //     $user->setFreelance($userEmail);
-                //     // enregistrement du gestionnaire
-                //     $entityManager->persist($freelance);
-                //     break;
-                case 'personel':
-                    $personel = new Personel;
-                    // ajout d'email du personnel
-                    $personel->setEmail($userEmail);
-                    // Association du personnel à l'utilisateur
-                    $user->setPersonel($userEmail);
-                    //  enregistrement du personnel
-                    $entityManager->persist($personel);
+                case 'personnel':
+                    $personnel = new Personnel();
+                    $personnel->setEmail($userEmail);
+                    $user->setPersonnel($personnel);
+                    $entityManager->persist($personnel);
                     break;
+
+                case 'freelance':
+                    $freelance = new Freelance();
+                    $freelance->setEmail($userEmail);
+                    $freelance->setTitre($form->get('freelance_titre')->getData());
+                    $freelance->setBiographie($form->get('freelance_biographie')->getData());
+                    $freelance->setNom($form->get('freelance_nom')->getData());
+                    $freelance->setTJM($form->get('freelance_TJM')->getData());
+                    $freelance->setPays($form->get('freelance_pays')->getData());
+                    $freelance->setVille($form->get('freelance_ville')->getData());
+                    $freelance->setDateNaissance($form->get('freelance_dateNaissance')->getData());
+
+                    $user->setFreelance($freelance);
+                    $entityManager->persist($freelance);
+                    break;
+
                 case 'gestionnaire':
-                    // Création de l'entreprise
                     $entreprise = new Entreprise();
-                    // ajout du nom de l'entreprise
                     $entreprise->setName($form->get('entreprise_nom')->getData());
                     $entreprise->setAdresse($form->get('entreprise_adresse')->getData());
                     $entreprise->setContact($form->get('entreprise_contact')->getData());
 
-                    // Création du gestionnaire
-                        $gestionnaire = new Gestionnaire();
-                        // ajout d'email du gestionnaire
-                        $gestionnaire->setEmail($userEmail);
-                        // association de gestionnaire à l'entreprise
-                        $gestionnaire->setEntreprise($entreprise);
-                    // Association du gestionnaire à l'utilisateur
+                    $gestionnaire = new Gestionnaire();
+                    $gestionnaire->setEmail($userEmail);
+                    $gestionnaire->setEntreprise($entreprise);
+
                     $user->setGestionnaire($gestionnaire);
-                    // enregistrement du gestionnaire
                     $entityManager->persist($gestionnaire);
-                    // enregistrement de l'entreprise
                     $entityManager->persist($entreprise);
                     break;
+
+                default:
+                    throw new \InvalidArgumentException("Type d'utilisateur non valide");
             }
 
-
-            // encode the plain password
             $user->setPassword($userPasswordHasher->hashPassword($user, $plainPassword));
 
             $entityManager->persist($user);
             $entityManager->flush();
 
-            // Envoi de l'email
-            $mailer->sendEmail(
-                $userEmail,
-                'Création de votre compte',
-                'Bienvenue! Votre compte a été créé avec succès. Vous pouvez désormais vous connecter et gérer les personnels de votre entreprise'
-            );
-            // $email = (new Email())
-            // ->from('no-reply@mission.com')
-            // ->to($userEmail)
-            // ->subject('Bienvenue sur notre plateforme')
-            // ->text('Bienvenue ! Votre compte a été créé avec succès.');
+//            // Envoi de l'email de bienvenue
+//            $emailService->sendEmail(
+//                $userEmail,
+//                'Création de votre compte',
+//                'Bienvenue! Votre compte a été créé avec succès. Vous pouvez désormais vous connecter.'
+//            );
 
-            // $mailer->send($email);
             // Connexion automatique et redirection
-            $userAuthenticator->authenticateUser(
+            return $userAuthenticator->authenticateUser(
                 $user,
                 $authenticator,
                 $request
             );
-
-            // do anything else you need here, like send an email
-
-            return $security->login($user, UserAuthAuthenticator::class, 'main');
         }
 
         return $this->render('registration/register.html.twig', [
-            'registrationForm' => $form,
+            'registrationForm' => $form->createView(),
         ]);
     }
 }

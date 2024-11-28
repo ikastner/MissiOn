@@ -43,6 +43,11 @@ class User implements UserInterface, PasswordAuthenticatedUserInterface
     #[ORM\OneToOne(targetEntity: Personel::class, inversedBy: 'user', cascade: ['persist', 'remove'])]
     private ?Personel $personel = null;
 
+    #[ORM\OneToOne(targetEntity: Freelance::class, inversedBy: 'user', cascade: ['persist', 'remove'])]
+    private ?Freelance $freelance = null;
+
+
+
     public function getId(): ?int
     {
         return $this->id;
@@ -158,6 +163,17 @@ class User implements UserInterface, PasswordAuthenticatedUserInterface
         return $this;
     }
 
+    public function getFreelance(): ?Freelance
+    {
+        return $this->freelance;
+    }
+
+    public function setFreelance(?Freelance $freelance): static
+    {
+        $this->freelance = $freelance;
+        return $this;
+    }
+
     /**
      * @see UserInterface
      */
@@ -166,4 +182,8 @@ class User implements UserInterface, PasswordAuthenticatedUserInterface
         // If you store any temporary, sensitive data on the user, clear it here
         // $this->plainPassword = null;
     }
+
+
+
+
 }

@@ -1,23 +1,124 @@
 {% extends 'base.html.twig' %}
 
-{% block title %}Register{% endblock %}
+{% block title %}
+    {% if registrationForm.entreprise_nom is defined %}
+        Inscription Entreprise
+    {% elseif registrationForm.freelance_nom is defined %}
+        Inscription Freelance
+    {% elseif registrationForm.personel_nom is defined %}
+        Inscription Personnel
+    {% else %}
+        Inscription
+    {% endif %}
+{% endblock %}
 
 {% block body %}
-    <h1>Register</h1>
+    <div class="container mt-5">
+        <div class="form-container mx-auto p-4 shadow-lg rounded" style="max-width: 600px; background-color: #f9f9f9;">
 
-    {{ form_errors(registrationForm) }}
+            <h1 class="mb-4 text-center">
+                {% if registrationForm.entreprise_nom is defined %}
+                    Inscription Entreprise
+                {% elseif registrationForm.freelance_nom is defined %}
+                    Inscription Freelance
+                {% elseif registrationForm.personel_nom is defined %}
+                    Inscription Personnel
+                {% else %}
+                    Inscription
+                {% endif %}
+            </h1>
 
-    {{ form_start(registrationForm) }}
-        {{ form_row(registrationForm.email) }}
-        {{ form_row(registrationForm.plainPassword, {
-            label: 'Password'
-        }) }}
-        {{ form_row(registrationForm.agreeTerms) }}
-        {{ form_row(registrationForm.entreprise_nom) }}
-        {{ form_row(registrationForm.entreprise_adresse) }}
-        {{ form_row(registrationForm.entreprise_contact) }}
+            {% if form_errors(registrationForm) %}
+                <div class="alert alert-danger">
+                    {{ form_errors(registrationForm) }}
+                </div>
+            {% endif %}
 
-        <button type="submit" class="btn">Register</button>
-    {{ form_end(registrationForm) }}
-    
+            {{ form_start(registrationForm, {'attr': {'class': 'needs-validation'}}) }}
+
+            <div class="mb-3">
+                {{ form_row(registrationForm.email, {'attr': {'class': 'form-control'}}) }}
+            </div>
+
+            <div class="mb-3">
+                {{ form_row(registrationForm.plainPassword, {
+                    'label': 'Password',
+                    'attr': {'class': 'form-control'}
+                }) }}
+            </div>
+
+            <div class="mb-3 form-check">
+                {{ form_row(registrationForm.agreeTerms, {'attr': {'class': 'form-check-input'}}) }}
+            </div>
+
+            {% if registrationForm.entreprise_nom is defined %}
+                <div class="mb-3">
+                    {{ form_row(registrationForm.entreprise_nom, {'attr': {'class': 'form-control'}}) }}
+                </div>
+                <div class="mb-3">
+                    {{ form_row(registrationForm.entreprise_adresse, {'attr': {'class': 'form-control'}}) }}
+                </div>
+                <div class="mb-3">
+                    {{ form_row(registrationForm.entreprise_contact, {'attr': {'class': 'form-control'}}) }}
+                </div>
+            {% endif %}
+
+            {% if registrationForm.freelance_nom is defined %}
+                <div class="mb-3">
+                    {{ form_row(registrationForm.freelance_nom, {'attr': {'class': 'form-control'}}) }}
+                </div>
+                <div class="mb-3">
+                    {{ form_row(registrationForm.freelance_titre, {'attr': {'class': 'form-control'}}) }}
+                </div>
+                <div class="mb-3">
+                    {{ form_row(registrationForm.freelance_TJM, {'attr': {'class': 'form-control'}}) }}
+                </div>
+                <div class="mb-3">
+                    {{ form_row(registrationForm.freelance_pays, {'attr': {'class': 'form-control'}}) }}
+                </div>
+                <div class="mb-3">
+                    {{ form_row(registrationForm.freelance_ville, {'attr': {'class': 'form-control'}}) }}
+                </div>
+                <div class="mb-3">
+                    {{ form_row(registrationForm.freelance_biographie, {
+                        'attr': {'class': 'form-control', 'rows': '5'}
+                    }) }}
+                </div>
+                <div class="mb-3">
+                    {{ form_row(registrationForm.freelance_dateNaissance, {'attr': {'class': 'form-control'}}) }}
+                </div>
+            {% endif %}
+
+            {% if registrationForm.personel_nom is defined %}
+                <div class="mb-3">
+                    {{ form_row(registrationForm.personel_nom, {'attr': {'class': 'form-control'}}) }}
+                </div>
+                <div class="mb-3">
+                    {{ form_row(registrationForm.personel_prenom, {'attr': {'class': 'form-control'}}) }}
+                </div>
+                <div class="mb-3">
+                    {{ form_row(registrationForm.personel_adresse, {'attr': {'class': 'form-control'}}) }}
+                </div>
+                <div class="mb-3">
+                    {{ form_row(registrationForm.personel_contact, {'attr': {'class': 'form-control'}}) }}
+                </div>
+            {% endif %}
+
+            <button type="submit" class="btn btn-lg w-100" style="background-color: #28a745; color: white;">Confirmer</button>
+
+            {{ form_end(registrationForm) }}
+
+            {% if formData is defined %}
+                <h3 class="mt-5">Données soumises :</h3>
+                <ul class="list-group">
+                    <li class="list-group-item"><strong>Nom :</strong> {{ formData['Nom'] }}</li>
+                    <li class="list-group-item"><strong>Email :</strong> {{ formData['Email'] }}</li>
+                    <li class="list-group-item"><strong>TJM :</strong> {{ formData['TJM'] }}</li>
+                    <li class="list-group-item"><strong>Pays :</strong> {{ formData['Pays'] }}</li>
+                    <li class="list-group-item"><strong>Ville :</strong> {{ formData['Ville'] }}</li>
+                    <li class="list-group-item"><strong>Date de Naissance :</strong> {{ formData['Date de Naissance'] | date('d-m-Y') }}</li>
+                </ul>
+            {% endif %}
+        </div>
+    </div>
 {% endblock %}

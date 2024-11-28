@@ -4,6 +4,7 @@ namespace App\Form;
 
 use App\Entity\User;
 // use Doctrine\DBAL\Types\TextType;
+use Symfony\Component\Form\Extension\Core\Type\DateType;
 use Symfony\Component\Form\AbstractType;
 use Symfony\Component\Form\Extension\Core\Type\CheckboxType;
 use Symfony\Component\Form\Extension\Core\Type\EmailType;
@@ -61,6 +62,59 @@ class RegistrationFormType extends AbstractType
                     ->add('entreprise_contact', EmailType::class, [
                         'mapped' => false,
                         'label' => 'Contact de l\'entreprise',
+                    ]);
+            }
+
+            // Ajoute les champs de freelance si le type est "freelance"
+            if ($options['user_type'] === 'freelance') {
+                $builder
+                    ->add('freelance_nom', TextType::class, [
+                        'mapped' => false,
+                        'label' => 'Nom',
+                    ])
+                    ->add('freelance_titre', TextType::class, [
+                        'mapped' => false,
+                        'label' => 'Titre',
+                    ])
+                    ->add('freelance_TJM', TextType::class, [
+                        'mapped' => false,
+                        'label' => 'TJM (Taux journalier moyen)',
+                    ])
+                    ->add('freelance_pays', TextType::class, [
+                        'mapped' => false,
+                        'label' => 'Pays',
+                    ])
+                    ->add('freelance_ville', TextType::class, [
+                        'mapped' => false,
+                        'label' => 'Ville',
+                    ])
+                    ->add('freelance_biographie', TextType::class, [
+                        'mapped' => false,
+                        'label' => 'Biographie',
+                    ])
+                    ->add('freelance_dateNaissance', DateType::class, [
+                        'mapped' => false,
+                        'label' => 'Date de naissance',
+                    ]);
+            }
+
+            if($options['user_type'] === 'personel'){
+                $builder
+                    ->add('personel_nom', TextType::class, [
+                        'mapped' => false,
+                        'label' => 'Nom du personnel',
+                    ])
+                    ->add('personel_prenom', TextType::class, [
+                        'mapped' => false,
+                        'label' => 'Prenom du personnel',
+                    ])
+                    ->add('personel_adresse', TextType::class, [
+                        'mapped' => false,
+                        'label' => 'Adresse du personnel',
+                    ])
+                    ->add('personel_contact', EmailType::class, [
+                        'mapped' => false,
+                        'label' => 'Contact du personnel',
                     ]);
             }
         ;
