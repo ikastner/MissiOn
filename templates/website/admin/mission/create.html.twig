@@ -1,0 +1,12 @@
+{% extends 'website/admin/layout/base.html.twig' %}
+
+{% block title %}Création mission{% endblock %}
+
+{% block body %}
+    <h1>Créer une mission</h1>
+
+    {{ form_start(form) }}
+        {{ form_widget(form) }}
+        <button type="submit">Créer</button>
+    {{ form_end(form) }}
+{% endblock %}

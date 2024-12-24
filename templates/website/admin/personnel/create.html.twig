@@ -1,0 +1,35 @@
+{% extends 'website/admin/layout/base.html.twig' %}
+
+{% block title %}Création personnel{% endblock %}
+
+{% block body %}
+<main class="content px-3 py-4">
+    <div class="container">
+    <h1>Créer un personel</h1>
+
+    {{ form_start(registrationForm, {'attr': {'class': 'needs-validation'}}) }}
+
+            <div class="mb-3">
+                {{ form_row(registrationForm.name, {'attr': {'class': 'form-control'}}) }}
+            </div>
+
+            <div class="mb-3">
+                {{ form_row(registrationForm.email, {'attr': {'class': 'form-control'}}) }}
+            </div>
+
+            <div class="mb-3">
+                {{ form_row(registrationForm.plainPassword, {
+                    'label': 'Password',
+                    'attr': {'class': 'form-control'}
+                }) }}
+            </div>
+
+            <div class="mb-3 form-check">
+                {{ form_row(registrationForm.agreeTerms, {'attr': {'class': 'form-check-input'}}) }}
+            </div>
+            <button type="submit" class="btn btn-lg w-100" style="background-color: #28a745; color: white;">Confirmer</button>
+
+    {{ form_end(registrationForm) }}
+    </div>
+</main>
+{% endblock %}

@@ -23,7 +23,7 @@ security:
                 # target: app_any_route
 
             remember_me:
-                secret: '%kernel.secret%'
+                secret: '%env(APP_SECRET)%'
                 lifetime: 604800
                 path: /
                 # by default, the feature is enabled by checking a checkbox in the

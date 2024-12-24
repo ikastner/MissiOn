@@ -18,3 +18,16 @@ registration_gestionnaire:
     controller: App\Controller\RegistrationController::register
     defaults: { type: 'gestionnaire'}  # Définit un paramètre 'type' pour le contrôleur
 
+registration_personel:
+    path: /register/personel  # URL pour l'inscription des gestionnaires
+    controller: App\Controller\RegistrationController::register
+    defaults: { type: 'personel'}  # Définit un paramètre 'type' pour le contrôleur
+
+personel_update:
+    path: /personel/{id}/edit
+    controller: App\Controller\PersonelController::update
+
+# personel_delete:
+#     path: /personel/{id}/delete
+#     controller: App\Controller\PersonelController::delete
+#     methods: [DELETE]

@@ -5,6 +5,7 @@ namespace App\Controller;
 use App\Entity\Entreprise;
 use App\Entity\Freelance;
 use App\Entity\Gestionnaire;
+use App\Entity\Personel;
 use App\Entity\Personnel;
 use App\Entity\User;
 use App\Form\RegistrationFormType;
@@ -45,11 +46,31 @@ class RegistrationController extends AbstractController
             $userEmail = $form->get('email')->getData();
 
             switch ($type) {
-                case 'personnel':
-                    $personnel = new Personnel();
-                    $personnel->setEmail($userEmail);
-                    $user->setPersonnel($personnel);
-                    $entityManager->persist($personnel);
+                case 'personel':
+                    // Récupérer l'utilisateur connecté 
+                    $currentUser = $this->getUser();
+                    // dd($this->getUser());
+                    
+                    // Vérification si l'utilisateur est un gestionnaire
+                    if ($currentUser->getType() !== 'gestionnaire') {
+                        throw new \Exception("Seul un gestionnaire peut créer un personnel.");
+                    }
+    
+                    $personel = new Personel();
+                    $personel->setEmail($userEmail);
+                    $personel->setName($form->get('name')->getData());
+                    // Association de entreprise de l'utilisateur au personnel
+                    $gestionnaire = $currentUser->getGestionnaire();
+                    $entreprise = $gestionnaire->getEntreprise();
+                    // verification si l'entreprise 
+                    if ($entreprise) {
+                        $personel->setEntreprise($entreprise);
+                    } else {
+                        throw new \Exception("L'utilisateur connecté n'est pas associé à une entreprise.");
+                    }
+                    // Association du personnel à un utilisateur
+                    $user->setPersonel($personel);
+                    $entityManager->persist($personel);
                     break;
 
                 case 'freelance':
@@ -99,14 +120,19 @@ class RegistrationController extends AbstractController
 //            );
 
             // Connexion automatique et redirection
-            return $userAuthenticator->authenticateUser(
-                $user,
-                $authenticator,
-                $request
-            );
+            if ($type !== 'personel') {
+                return $userAuthenticator->authenticateUser(
+                    $user,
+                    $authenticator,
+                    $request
+                );
+            }
+            $this->addFlash('success', 'Un compte personnel à été créé avec succes');
+            return $this->redirectToRoute('personels_list');
+
         }
 
-        return $this->render('registration/register.html.twig', [
+        return $this->render($type === 'personel' ? 'website/admin/personnel/create.html.twig' : 'registration/register.html.twig', [
             'registrationForm' => $form->createView(),
         ]);
     }

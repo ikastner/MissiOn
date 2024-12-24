@@ -1,0 +1,28 @@
+{% extends 'website/admin/layout/base.html.twig' %}
+
+{% block title %}MAJ personnel{% endblock %}
+
+{% block body %}
+<main class="content px-3 py-4">
+    <div class="container">
+        <h1>Modifer un personel</h1>
+
+        {{ form_start(form, {'attr': {'class': 'needs-validation'}}) }}
+
+        <div class="mb-3">
+            {{ form_row(form.name, {'attr': {'class': 'form-control'}}) }}
+        </div>
+
+        <div class="mb-3">
+            {{ form_row(form.email, {'attr': {'class': 'form-control'}}) }}
+        </div>
+
+        <button type="submit" class="btn btn-lg w-100" style="background-color: #28a745; color: white;">
+            Confirmer
+        </button>
+
+        {{ form_end(form) }}
+
+    </div>
+</main>
+{% endblock %}

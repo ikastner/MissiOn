@@ -5,8 +5,8 @@
         Inscription Entreprise
     {% elseif registrationForm.freelance_nom is defined %}
         Inscription Freelance
-    {% elseif registrationForm.personel_nom is defined %}
-        Inscription Personnel
+    {# {% elseif registrationForm.name is defined %} #}
+        {# Inscription Personnel #}
     {% else %}
         Inscription
     {% endif %}
@@ -21,8 +21,8 @@
                     Inscription Entreprise
                 {% elseif registrationForm.freelance_nom is defined %}
                     Inscription Freelance
-                {% elseif registrationForm.personel_nom is defined %}
-                    Inscription Personnel
+                {# {% elseif registrationForm.name is defined %} #}
+                    {# Inscription Personnel #}
                 {% else %}
                     Inscription
                 {% endif %}
@@ -89,9 +89,9 @@
                 </div>
             {% endif %}
 
-            {% if registrationForm.personel_nom is defined %}
+            {# {% if registrationForm.name is defined %}
                 <div class="mb-3">
-                    {{ form_row(registrationForm.personel_nom, {'attr': {'class': 'form-control'}}) }}
+                    {{ form_row(registrationForm.name, {'attr': {'class': 'form-control'}}) }}
                 </div>
                 <div class="mb-3">
                     {{ form_row(registrationForm.personel_prenom, {'attr': {'class': 'form-control'}}) }}
@@ -102,7 +102,7 @@
                 <div class="mb-3">
                     {{ form_row(registrationForm.personel_contact, {'attr': {'class': 'form-control'}}) }}
                 </div>
-            {% endif %}
+            {% endif %} #}
 
             <button type="submit" class="btn btn-lg w-100" style="background-color: #28a745; color: white;">Confirmer</button>
 

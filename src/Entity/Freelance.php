@@ -5,6 +5,8 @@ namespace App\Entity;
 
 use AllowDynamicProperties;
 use App\Repository\FreelanceRepository;
+use Doctrine\Common\Collections\ArrayCollection;
+use Doctrine\Common\Collections\Collection;
 use Doctrine\DBAL\Types\Types;
 use Doctrine\ORM\Mapping as ORM;
 
@@ -46,6 +48,17 @@ class Freelance
 
     // Declare the freelance property
     private ?Freelance $freelance = null;
+
+    /**
+     * @var Collection<int, Missions>
+     */
+    #[ORM\OneToMany(targetEntity: Missions::class, mappedBy: 'freelance')]
+    private Collection $missions;
+
+    public function __construct()
+    {
+        $this->missions = new ArrayCollection();
+    }
 
     public function getId(): ?int
     {
@@ -155,6 +168,36 @@ class Freelance
     public function setFreelance(?Freelance $freelance): static
     {
         $this->freelance = $freelance;
+
+        return $this;
+    }
+
+    /**
+     * @return Collection<int, Missions>
+     */
+    public function getMissions(): Collection
+    {
+        return $this->missions;
+    }
+
+    public function addMission(Missions $mission): static
+    {
+        if (!$this->missions->contains($mission)) {
+            $this->missions->add($mission);
+            $mission->setFreelance($this);
+        }
+
+        return $this;
+    }
+
+    public function removeMission(Missions $mission): static
+    {
+        if ($this->missions->removeElement($mission)) {
+            // set the owning side to null (unless already changed)
+            if ($mission->getFreelance() === $this) {
+                $mission->setFreelance(null);
+            }
+        }
 
         return $this;
     }

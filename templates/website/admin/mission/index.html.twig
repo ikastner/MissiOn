@@ -1,0 +1,39 @@
+{% extends 'website/admin/layout/base.html.twig' %}
+
+{% block title %}Liste de missions{% endblock %}
+
+{% block body %}
+    <h1>Liste des missions</h1>
+    <div class="card">
+    <div class="card-body">
+      <table id="example1" class="table table-bordered table-striped">
+        <thead>
+            <tr>
+              <th>Titre</th>
+              <th>description</th>
+              <th>debut</th>
+              <th>fin</th>
+              <th>estimation</th>
+              <th>tjm</th>
+            </tr>
+        </thead>
+        <tbody>
+            {% for mission in missions %}
+                <tr>
+                    <td> {{ mission.description }} </td>
+                    <td> {{ mission.debut }} </td>
+                    <td> {{ mission.fin }} </td>
+                    <td> {{ mission.estimation }} </td>
+                    <td> {{ mission.tjm }} </td>
+                    
+                </tr>
+            {% else %}
+            <td>Aucune mission disponible</td>
+            {% endfor %}
+        </tbody>
+      </table>
+    </div>
+    <!-- /.card-body -->
+</div>
+    
+{% endblock %}

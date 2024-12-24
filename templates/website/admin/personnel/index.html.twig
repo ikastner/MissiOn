@@ -1,0 +1,51 @@
+{% extends 'website/admin/layout/base.html.twig' %}
+
+{% block title %}Liste des personnels{% endblock %}
+
+{% block body %}
+    <h1>Liste des personnels</h1>
+    {% for label, messages in app.flashes %}
+    {% for message in messages %}
+        <div class="alert alert-{{ label }}">
+            {{ message }}
+        </div>
+    {% endfor %}
+    {% endfor %}
+    <div class="card">
+    <div class="card-body">
+      <table id="example1" class="table table-bordered table-striped">
+        <thead>
+            <tr>
+              <th>Nom</th>
+              <th>Email</th>
+              <th>Action</th>
+            </tr>
+        </thead>
+        <tbody>
+            {% for personel in personels %}
+            <tr>
+                <td>{{ personel.name }}</td>
+                <td>{{ personel.email }}</td>
+                <td>
+                    <a href="{{ path('personel_update', {id: personel.id}) }}" class="d-inline">
+                        <button class="btn btn-success">Modifier</button>
+                    </a>
+                    <form method="post" action="{{ path('personel_delete', {id: personel.id}) }}" onsubmit="return confirm('Voulez-vous vraiment supprimer ce personnel ?');" class="d-inline">
+                        <input type="hidden" name="_method" value="DELETE">
+                        <input type="hidden" name="_token" value="{{ csrf_token('delete' ~ personel.id) }}">
+                        <button type="submit" class="btn btn-danger">Supprimer</button>
+                    </form>
+                </td>
+            </tr>
+            {% else %}
+            <tr>
+                <td colspan="3">Aucun personnel lié à votre entreprise</td>
+            </tr>
+            {% endfor %}
+        </tbody>
+      </table>
+    </div>
+    <!-- /.card-body -->
+</div>
+    
+{% endblock %}

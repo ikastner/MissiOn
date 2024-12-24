@@ -8,6 +8,7 @@ use Symfony\Component\Form\Extension\Core\Type\DateType;
 use Symfony\Component\Form\AbstractType;
 use Symfony\Component\Form\Extension\Core\Type\CheckboxType;
 use Symfony\Component\Form\Extension\Core\Type\EmailType;
+use Symfony\Component\Form\Extension\Core\Type\IntegerType;
 use Symfony\Component\Form\Extension\Core\Type\TextType;
 use Symfony\Component\Form\Extension\Core\Type\PasswordType;
 use Symfony\Component\Form\FormBuilderInterface;
@@ -76,7 +77,7 @@ class RegistrationFormType extends AbstractType
                         'mapped' => false,
                         'label' => 'Titre',
                     ])
-                    ->add('freelance_TJM', TextType::class, [
+                    ->add('freelance_TJM', IntegerType::class, [
                         'mapped' => false,
                         'label' => 'TJM (Taux journalier moyen)',
                     ])
@@ -100,22 +101,11 @@ class RegistrationFormType extends AbstractType
 
             if($options['user_type'] === 'personel'){
                 $builder
-                    ->add('personel_nom', TextType::class, [
+                    ->add('name', TextType::class, [
                         'mapped' => false,
                         'label' => 'Nom du personnel',
                     ])
-                    ->add('personel_prenom', TextType::class, [
-                        'mapped' => false,
-                        'label' => 'Prenom du personnel',
-                    ])
-                    ->add('personel_adresse', TextType::class, [
-                        'mapped' => false,
-                        'label' => 'Adresse du personnel',
-                    ])
-                    ->add('personel_contact', EmailType::class, [
-                        'mapped' => false,
-                        'label' => 'Contact du personnel',
-                    ]);
+                    ;
             }
         ;
     }

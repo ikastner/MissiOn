@@ -3,6 +3,8 @@
 namespace App\Entity;
 
 use App\Repository\PersonelRepository;
+use Doctrine\Common\Collections\ArrayCollection;
+use Doctrine\Common\Collections\Collection;
 use Doctrine\ORM\Mapping as ORM;
 
 #[ORM\Entity(repositoryClass: PersonelRepository::class)]
@@ -22,8 +24,19 @@ class Personel
     #[ORM\ManyToOne(inversedBy: 'personels')]
     private ?Entreprise $entreprise = null;
 
-    #[ORM\OneToOne(mappedBy: 'personnel', cascade: ['persist', 'remove'])]
+    #[ORM\OneToOne(mappedBy: 'personel', cascade: ['persist', 'remove'])]
     private ?User $user = null;
+
+    /**
+     * @var Collection<int, Missions>
+     */
+    #[ORM\OneToMany(targetEntity: Missions::class, mappedBy: 'personel')]
+    private Collection $missions;
+
+    public function __construct()
+    {
+        $this->missions = new ArrayCollection();
+    }
 
     public function getId(): ?int
     {
@@ -74,6 +87,36 @@ class Personel
     public function setUser(?User $user): static
     {
         $this->user = $user;
+        return $this;
+    }
+
+    /**
+     * @return Collection<int, Missions>
+     */
+    public function getMissions(): Collection
+    {
+        return $this->missions;
+    }
+
+    public function addMission(Missions $mission): static
+    {
+        if (!$this->missions->contains($mission)) {
+            $this->missions->add($mission);
+            $mission->setPersonel($this);
+        }
+
+        return $this;
+    }
+
+    public function removeMission(Missions $mission): static
+    {
+        if ($this->missions->removeElement($mission)) {
+            // set the owning side to null (unless already changed)
+            if ($mission->getPersonel() === $this) {
+                $mission->setPersonel(null);
+            }
+        }
+
         return $this;
     }
 }
