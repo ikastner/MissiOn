@@ -19,12 +19,12 @@ registration_gestionnaire:
     defaults: { type: 'gestionnaire'}  # Définit un paramètre 'type' pour le contrôleur
 
 registration_personel:
-    path: /register/personel  # URL pour l'inscription des gestionnaires
+    path: admin/register/personel  # URL pour l'inscription des gestionnaires
     controller: App\Controller\RegistrationController::register
     defaults: { type: 'personel'}  # Définit un paramètre 'type' pour le contrôleur
 
 personel_update:
-    path: /personel/{id}/edit
+    path: /admin/personel/{id}/edit
     controller: App\Controller\PersonelController::update
 
 # personel_delete:

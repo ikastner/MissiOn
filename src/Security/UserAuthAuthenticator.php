@@ -58,9 +58,9 @@ class UserAuthAuthenticator extends AbstractLoginFormAuthenticator
                 case 'freelance':
                     return new RedirectResponse($this->urlGenerator->generate('app_freelance_view'));
                 case 'gestionnaire':
-                    return new RedirectResponse($this->urlGenerator->generate('app_gestionnaire_view'));
+                    return new RedirectResponse($this->urlGenerator->generate('app_admin'));
                 case 'personel':
-                    return new RedirectResponse($this->urlGenerator->generate('app_gestionnaire_view')); 
+                    return new RedirectResponse($this->urlGenerator->generate('app_admin')); 
                 // // default:
                 //     return new RedirectResponse('/default/dashboard'); // Route par défaut
             }

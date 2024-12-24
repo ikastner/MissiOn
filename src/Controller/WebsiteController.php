@@ -11,23 +11,23 @@ use Symfony\Component\Routing\Attribute\Route;
 
 class WebsiteController extends AbstractController
 {
-    #[Route('/website', name: 'app_website')]
-    public function index(): Response
-    {
-        return $this->render('website/po.html.twig', [
-            'controller_name' => 'WebsiteController',
-        ]);
-    }
+    // #[Route('/website', name: 'app_website')]
+    // public function index(): Response
+    // {
+    //     return $this->render('website/po.html.twig', [
+    //         'controller_name' => 'WebsiteController',
+    //     ]);
+    // }
 
-    #[Route('/website/gestionnaire', name: 'app_gestionnaire_view')]
-    public function gestionnaire_view():Response 
-    {
-        return $this->render('website/admin/index.html.twig', [
-            'controller_name' => 'WebsiteController',
-        ]);
-    }
+    // #[Route('/gestionnaire', name: 'app_gestionnaire_view')]
+    // public function gestionnaire_view():Response 
+    // {
+    //     return $this->render('website/admin/index.html.twig', [
+    //         'controller_name' => 'WebsiteController',
+    //     ]);
+    // }
 
-    #[Route('/', name: 'app_freelance_view')]
+    #[Route('/', name: 'app_home')]
     public function freelance_view():Response
     {
         return $this->render('/home/index.html.twig', [
@@ -50,6 +50,16 @@ class WebsiteController extends AbstractController
     {
         return $this->render('website/admin/index.html.twig', [
             'controller_name' => 'WebsiteController',
+        ]);
+    }
+
+    #[Route('/admin/find-freelance', name: 'app_find_freelance')]
+    public function findFreelance( EntityManagerInterface $entityManager): Response
+    {
+        $freelances = $entityManager->getRepository(Freelance::class)->findAll();
+
+        return $this->render('website/admin/find_freelance/search_freelance.html.twig', [
+            'freelances' => $freelances,
         ]);
     }
 

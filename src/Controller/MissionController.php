@@ -12,7 +12,7 @@ use Symfony\Component\Routing\Attribute\Route;
 
 class MissionController extends AbstractController
 {
-    #[Route('/mission/create', name: 'create_missions')]
+    #[Route('/admin/mission/create', name: 'create_missions')]
     public function create_mission(Request $request, EntityManagerInterface $entityManager ): Response
     {
         $mission = new Missions();
@@ -46,7 +46,7 @@ class MissionController extends AbstractController
         
     }
 
-    #[Route('/mission', name: 'missions_list')]
+    #[Route('/admin/mission', name: 'missions_list')]
     public function list_missions(EntityManagerInterface $entityManager): Response
     {
         $missions = $entityManager->getRepository(Missions::class)->findAll();

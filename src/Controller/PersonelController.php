@@ -12,7 +12,7 @@ use Symfony\Component\Routing\Attribute\Route;
 
 class PersonelController extends AbstractController
 {
-    #[Route('/personel/list', name: 'personels_list')]
+    #[Route('/admin/personel/list', name: 'personels_list')]
     public function list_personel(EntityManagerInterface $entityManager): Response
     {
         $personels = $entityManager->getRepository(Personel::class)->findAll();
@@ -43,7 +43,7 @@ class PersonelController extends AbstractController
         ]);
     }
 
-    #[Route('/personel/{id}/delete', name: 'personel_delete', methods: ['DELETE'])]
+    #[Route('/admin/personel/{id}/delete', name: 'personel_delete', methods: ['DELETE'])]
     public function delete(Request $request, Personel $personel, EntityManagerInterface $entityManager): Response
     {
         // Vérifie le token CSRF

@@ -1,111 +1,131 @@
 {% extends 'website/admin/layout/base.html.twig' %}
 
 {% block title %}MissiOn{% endblock %}
-{% block body %}
+{# {% block stylesheets %}
+<style>
+    .card-title {
+        font-size: 1.25rem;
+    }
+    .card-body {
+        text-align: center;
+    }
+    .card-icon {
+        font-size: 3rem;
+        margin-bottom: 10px;
+    }
+    .section-header {
+        margin-bottom: 30px;
+    }
+    .dashboard-row {
+        margin-top: 30px;
+    }
+</style> 
+{% endblock %} #}
 
+
+{% block body %}
 <main class="content px-3 py-4">
-    {# <div class="container-fluid">
-        <div class="mb-3">
-            <h3 class="fw-bold fs-4 mb-3">Admin Dashboard</h3>
-            <div class="row">
-            <div class="col-12 col-md-4 ">
-                <div class="card border-0">
-                    <div class="card-body py-4">
-                        <h5 class="mb-2 fw-bold">
-                            Memebers Progress
-                        </h5>
-                        <p class="mb-2 fw-bold">
-                            $72,540
-                        </p>
-                        <div class="mb-0">
-                            <span class="badge text-success me-2">
-                                +9.0%
-                            </span>
-                            <span class=" fw-bold">
-                                Since Last Month
-                            </span>
-                        </div>
-                    </div>
-                </div>
-            </div>
-            <div class="col-12 col-md-4 ">
-                <div class="card  border-0">
-                    <div class="card-body py-4">
-                        <h5 class="mb-2 fw-bold">
-                            Memebers Progress
-                        </h5>
-                        <p class="mb-2 fw-bold">
-                            $72,540
-                        </p>
-                        <div class="mb-0">
-                            <span class="badge text-success me-2">
-                                +9.0%
-                            </span>
-                            <span class="fw-bold">
-                                Since Last Month
-                            </span>
-                        </div>
-                    </div>
-                </div>
-            </div>
-            <div class="col-12 col-md-4 ">
-                <div class="card border-0">
-                    <div class="card-body py-4">
-                        <h5 class="mb-2 fw-bold">
-                            Memebers Progress
-                        </h5>
-                        <p class="mb-2 fw-bold">
-                            $72,540
-                        </p>
-                        <div class="mb-0">
-                            <span class="badge text-success me-2">
-                                +9.0%
-                            </span>
-                            <span class="fw-bold">
-                                Since Last Month
-                            </span>
-                        </div>
-                    </div>
-                </div>
-            </div>
-            </div>
-            <h3 class="fw-bold fs-4 my-3">Avg. Agent Earnings
-        </h3>
+    <div class="container-fluid">
+        <!-- Header -->
         <div class="row">
-            <div class="col-12">
-                <table class="table table-striped">
-                    <thead>
-                        <tr class="highlight">
-                            <th scope="col">#</th>
-                            <th scope="col">First</th>
-                            <th scope="col">Last</th>
-                            <th scope="col">Handle</th>
-                        </tr>
-                    </thead>
-                    <tbody>
-                        <tr>
-                            <th scope="row">1</th>
-                            <td>Mark</td>
-                            <td>Otto</td>
-                            <td>@mdo</td>
-                        </tr>
-                        <tr>
-                            <th scope="row">2</th>
-                            <td>Jacob</td>
-                            <td>Thornton</td>
-                            <td>@fat</td>
-                        </tr>
-                        <tr>
-                            <th scope="row">3</th>
-                            <td colspan="2">Larry the Bird</td>
-                            <td>@twitter</td>
-                        </tr>
-                    </tbody>
-                </table>
+            <div class="col-12 text-center my-4">
+                <h2>Bienvenue sur votre tableau de bord </h2>
+                <p>Gérez vos missions, freelances, factures, personnels, contrats, etc.</p>
             </div>
         </div>
+
+        <!-- Dashboard Section -->
+        <div class="row dashboard-row pb-4">
+            <!-- Missions Card -->
+            <div class="col-md-4">
+                <div class="card shadow">
+                    <div class="card-body">
+                        <div class="card-icon text-primary">
+                            <i class="bi bi-briefcase"></i>
+                        </div>
+                        <h5 class="card-title">Missions</h5>
+                        <p>Voir toutes vos missions en cours et passées</p>
+                        <a href="{{ path('missions_list')}}" class="btn btn-success w-100">Accéder aux missions</a>
+                    </div>
+                </div>
+            </div>
+
+            <!-- Freelances Card -->
+            <div class="col-md-4">
+                <div class="card shadow">
+                    <div class="card-body">
+                        <div class="card-icon text-success">
+                            <i class="bi bi-person-workspace"></i>
+                        </div>
+                        <h5 class="card-title">Freelances</h5>
+                        <p>Gérer vos freelances et leur statut</p>
+                        <a href="{{ path('app_find_freelance')}}" class="btn btn-success w-100">Voir les freelances</a>
+                    </div>
+                </div>
+            </div>
+
+            <!-- Factures Card -->
+            <div class="col-md-4">
+                <div class="card shadow">
+                    <div class="card-body">
+                        <div class="card-icon text-warning">
+                            <i class="bi bi-file-earmark-earphones"></i>
+                        </div>
+                        <h5 class="card-title">Factures</h5>
+                        <p>Suivi de vos factures émises et reçues</p>
+                        <a href="#" class="btn btn-success w-100">Consulter les factures</a>
+                    </div>
+                </div>
+            </div>
         </div>
-    </div>             #} Bienvenue 
+
+        <!-- Additional Sections -->
+        <div class="row dashboard-row">
+            <!-- Gestion de personnels -->
+            {% if app.user and is_granted('ROLE_GESTIONNAIRE') %}
+            <div class="col-md-4">
+                <div class="card shadow">
+                    <div class="card-body">
+                        <div class="card-icon text-info">
+                            <i class="bi bi-person-lines-fill"></i>
+                        </div>
+                        <h5 class="card-title">Gestion de personnels</h5>
+                        <p>Ajouter, modifier, ou supprimer des membres du personnel</p>
+                        <a href="{{ path('personels_list')}}" class="btn btn-success w-100">Gérer le personnel</a>
+                    </div>
+                </div>
+            </div>
+            {% endif %}
+            <!-- Contrats Card -->
+            <div class="col-md-4">
+                <div class="card shadow">
+                    <div class="card-body">
+                        <div class="card-icon text-danger">
+                            <i class="bi bi-file-earmark-check"></i>
+                        </div>
+                        <h5 class="card-title">Contrats</h5>
+                        <p>Suivi et gestion des contrats des freelances et employés</p>
+                        <a href="#" class="btn btn-success w-100">Voir les contrats</a>
+                    </div>
+                </div>
+            </div>
+
+            <!-- Notifications Card -->
+            <div class="col-md-4">
+                <div class="card shadow">
+                    <div class="card-body">
+                        <div class="card-icon text-dark">
+                            <i class="bi bi-bell"></i>
+                        </div>
+                        <h5 class="card-title">Notifications</h5>
+                        <p>Recevez les alertes importantes concernant vos missions et freelances</p>
+                        <a href="#" class="btn btn-success w-100">Voir les notifications</a>
+                    </div>
+                </div>
+            </div>
+        </div>
+    </div>
+
 </main>
 
 {% endblock %}
