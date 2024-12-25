@@ -16,6 +16,16 @@ class CandidatureRepository extends ServiceEntityRepository
         parent::__construct($registry, Candidature::class);
     }
 
+    public function findOneByFreelanceAndMission(int $freelanceId, int $missionId): ?Candidature
+    {
+        return $this->createQueryBuilder('c')
+            ->andWhere('c.freelance = :freelanceId')
+            ->andWhere('c.mission = :missionId')
+            ->setParameter('freelanceId', $freelanceId)
+            ->setParameter('missionId', $missionId)
+            ->getQuery()
+            ->getOneOrNullResult();
+    }
     //    /**
     //     * @return Candidature[] Returns an array of Candidature objects
     //     */
@@ -40,4 +50,5 @@ class CandidatureRepository extends ServiceEntityRepository
     //            ->getOneOrNullResult()
     //        ;
     //    }
+
 }

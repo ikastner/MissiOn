@@ -4,6 +4,7 @@ namespace App\Controller;
 
 use App\Entity\Candidature;
 use App\Entity\Missions;
+use App\Repository\CandidatureRepository;
 use Doctrine\ORM\EntityManagerInterface;
 use Symfony\Bundle\FrameworkBundle\Controller\AbstractController;
 use Symfony\Component\HttpFoundation\Request;
@@ -29,7 +30,7 @@ class CandidatureController extends AbstractController
         ]);
     }
 
-    public function postuler(Request $request, EntityManagerInterface $entityManager): Response
+    public function postuler(Request $request, EntityManagerInterface $entityManager, CandidatureRepository $candidatureRepository): Response
     {
         $missionId = $request->get('mission_id');
         $mission = $entityManager->getRepository(Missions::class)->find($missionId);
@@ -42,6 +43,13 @@ class CandidatureController extends AbstractController
 
         if (!$freelance) {
             throw $this->createAccessDeniedException('Vous devez être un freelance pour postuler.');
+        }
+
+        // Vérifiez si une candidature existe déjà
+        $existingCandidature = $candidatureRepository->findOneByFreelanceAndMission($freelance->getId(), $mission->getId());
+        if ($existingCandidature) {
+            $this->addFlash('error', 'Vous avez déjà postulé pour cette mission.');
+            return $this->redirectToRoute('mission_detail', ['id' => $mission->getId()]);
         }
 
         $candidature = new Candidature();
