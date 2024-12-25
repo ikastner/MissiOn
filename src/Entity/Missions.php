@@ -3,6 +3,9 @@
 namespace App\Entity;
 
 use App\Repository\MissionsRepository;
+use Doctrine\Common\Collections\ArrayCollection;
+use Doctrine\Common\Collections\Collection;
+use Doctrine\DBAL\Types\Types;
 use Doctrine\ORM\Mapping as ORM;
 
 #[ORM\Entity(repositoryClass: MissionsRepository::class)]
@@ -19,11 +22,15 @@ class Missions
     #[ORM\Column(length: 255)]
     private ?string $description = null;
 
-    #[ORM\Column(length: 255)]
-    private ?string $debut = null;
+    // #[ORM\Column(length: 255)]
+    // private ?string $debut = null;
+    #[ORM\Column(type: Types::DATETIME_MUTABLE)]
+    private ?\DateTimeInterface $debut = null;
 
-    #[ORM\Column(length: 255)]
-    private ?string $fin = null;
+    // #[ORM\Column(length: 255)]
+    // private ?string $fin = null;
+    #[ORM\Column(type: Types::DATETIME_MUTABLE)]
+    private ?\DateTimeInterface $fin = null;
 
     #[ORM\Column(length: 255)]
     private ?string $estimation = null;
@@ -43,8 +50,16 @@ class Missions
     #[ORM\ManyToOne(inversedBy: 'missions')]
     private ?Personel $personel = null;
 
-    #[ORM\ManyToOne(inversedBy: 'missions')]
-    private ?Freelance $freelance = null;
+    /**
+     * @var Collection<int, Candidature>
+     */
+    #[ORM\OneToMany(targetEntity: Candidature::class, mappedBy: 'mission')]
+    private Collection $candidatures;
+
+    public function __construct()
+    {
+        $this->candidatures = new ArrayCollection();
+    }
 
     public function getId(): ?int
     {
@@ -75,24 +90,24 @@ class Missions
         return $this;
     }
 
-    public function getDebut(): ?string
+    public function getDebut(): ?\DateTimeInterface
     {
         return $this->debut;
     }
 
-    public function setDebut(string $debut): static
+    public function setDebut(\DateTimeInterface $debut): static
     {
         $this->debut = $debut;
 
         return $this;
     }
 
-    public function getFin(): ?string
+    public function getFin(): ?\DateTimeInterface
     {
         return $this->fin;
     }
 
-    public function setFin(string $fin): static
+    public function setFin(\DateTimeInterface $fin): static
     {
         $this->fin = $fin;
 
@@ -171,15 +186,34 @@ class Missions
         return $this;
     }
 
-    public function getFreelance(): ?Freelance
+    /**
+     * @return Collection<int, Candidature>
+     */
+    public function getCandidatures(): Collection
     {
-        return $this->freelance;
+        return $this->candidatures;
     }
 
-    public function setFreelance(?Freelance $freelance): static
+    public function addCandidature(Candidature $candidature): static
     {
-        $this->freelance = $freelance;
+        if (!$this->candidatures->contains($candidature)) {
+            $this->candidatures->add($candidature);
+            $candidature->setMission($this);
+        }
 
         return $this;
     }
+
+    public function removeCandidature(Candidature $candidature): static
+    {
+        if ($this->candidatures->removeElement($candidature)) {
+            // set the owning side to null (unless already changed)
+            if ($candidature->getMission() === $this) {
+                $candidature->setMission(null);
+            }
+        }
+
+        return $this;
+    }
+
 }

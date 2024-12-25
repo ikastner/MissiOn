@@ -1,0 +1,27 @@
+{% extends 'base.html.twig' %}
+
+{% block body %}
+<h1>Détails de la Mission</h1>
+
+<div>
+{% for mission in missions %}
+    <h2>{{ mission.title }}</h2>
+    <p>{{ mission.description }}</p>
+    <p><strong>Date de début :</strong> {{ mission.debut }}</p>
+    <p><strong>Date de fin :</strong> {{ mission.fin }}</p>
+</div>
+
+<!-- Formulaire visible -->
+<form method="post" action="{{ path('candidature_postuler', {id: mission.id}) }}">
+    <input type="hidden" name="mission_id" value="{{ mission.id }}">
+    {{ csrf_token('postuler_mission') }}
+
+    <button type="submit" class="btn btn-primary">Postuler</button>
+</form>
+{% endfor %}
+{% for message in app.flashes('success') %}
+    <div class="alert alert-success">
+        {{ message }}
+    </div>
+{% endfor %}
+{% endblock %}

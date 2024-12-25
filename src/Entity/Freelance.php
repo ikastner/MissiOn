@@ -50,14 +50,14 @@ class Freelance
     private ?Freelance $freelance = null;
 
     /**
-     * @var Collection<int, Missions>
+     * @var Collection<int, Candidature>
      */
-    #[ORM\OneToMany(targetEntity: Missions::class, mappedBy: 'freelance')]
-    private Collection $missions;
+    #[ORM\OneToMany(targetEntity: Candidature::class, mappedBy: 'freelance')]
+    private Collection $candidatures;
 
     public function __construct()
     {
-        $this->missions = new ArrayCollection();
+        $this->candidatures = new ArrayCollection();
     }
 
     public function getId(): ?int
@@ -173,29 +173,29 @@ class Freelance
     }
 
     /**
-     * @return Collection<int, Missions>
+     * @return Collection<int, Candidature>
      */
-    public function getMissions(): Collection
+    public function getCandidatures(): Collection
     {
-        return $this->missions;
+        return $this->candidatures;
     }
 
-    public function addMission(Missions $mission): static
+    public function addCandidature(Candidature $candidature): static
     {
-        if (!$this->missions->contains($mission)) {
-            $this->missions->add($mission);
-            $mission->setFreelance($this);
+        if (!$this->candidatures->contains($candidature)) {
+            $this->candidatures->add($candidature);
+            $candidature->setFreelance($this);
         }
 
         return $this;
     }
 
-    public function removeMission(Missions $mission): static
+    public function removeCandidature(Candidature $candidature): static
     {
-        if ($this->missions->removeElement($mission)) {
+        if ($this->candidatures->removeElement($candidature)) {
             // set the owning side to null (unless already changed)
-            if ($mission->getFreelance() === $this) {
-                $mission->setFreelance(null);
+            if ($candidature->getFreelance() === $this) {
+                $candidature->setFreelance(null);
             }
         }
 

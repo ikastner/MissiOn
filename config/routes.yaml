@@ -31,3 +31,8 @@ personel_update:
 #     path: /personel/{id}/delete
 #     controller: App\Controller\PersonelController::delete
 #     methods: [DELETE]
+
+candidature_postuler:
+    path: /mission/{id}/postuler
+    controller: App\Controller\CandidatureController::postuler
+    methods: [POST]

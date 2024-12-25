@@ -21,14 +21,21 @@ class MissionController extends AbstractController
         $form = $this->createForm(MissionsType::class, $mission);
         $form->handleRequest($request);
 
+        $personel = $this->getUser()->getPersonel();
+
+        if (!$personel) {
+            throw $this->createAccessDeniedException('Vous devez être un personnel pour créer un mission.');
+        }
+
         if ($form->isSubmitted() && $form->isValid()) {
+            $mission->setPersonel($personel);
             $mission->setTitle($form->get('title')->getData());
             $mission->setDescription($form->get('description')->getData());
             $mission->setDebut($form->get('debut')->getData());
             $mission->setFin($form->get('fin')->getData());
             $mission->setEstimation($form->get('estimation')->getData());
             $mission->setTjm($form->get('tjm')->getData());
-            $mission->setStatus($form->get('status')->getData());
+            $mission->setStatus('attente');
             $mission->setNiveau($form->get('niveau')->getData());
             $mission->setTailleProjet($form->get('taille_projet')->getData());
 
@@ -55,4 +62,6 @@ class MissionController extends AbstractController
             'missions' => $missions,
         ]);
     }
+
+
 }

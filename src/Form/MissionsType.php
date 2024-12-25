@@ -7,6 +7,7 @@ use App\Entity\Missions;
 use App\Entity\Personel;
 use Symfony\Bridge\Doctrine\Form\Type\EntityType;
 use Symfony\Component\Form\AbstractType;
+use Symfony\Component\Form\Extension\Core\Type\DateTimeType;
 use Symfony\Component\Form\Extension\Core\Type\TextType;
 use Symfony\Component\Form\FormBuilderInterface;
 use Symfony\Component\OptionsResolver\OptionsResolver;
@@ -24,12 +25,14 @@ class MissionsType extends AbstractType
                 'mapped' => false,
                 'label' => 'description',
             ])
-            ->add('debut', TextType::class, [
-                'mapped' => false,
+            ->add('debut', DateTimeType::class, [
+                'widget' => 'single_text',
+                'data' => new \DateTime(),
                 'label' => 'Date de debut',
             ])
-            ->add('fin', TextType::class, [
-                'mapped' => false,
+            ->add('fin', DateTimeType::class, [
+                'widget' => 'single_text',
+                'data' => new \DateTime(),
                 'label' => 'Date de fin',
             ])
             ->add('estimation', TextType::class, [
@@ -39,10 +42,6 @@ class MissionsType extends AbstractType
             ->add('tjm', TextType::class, [
                 'mapped' => false,
                 'label' => 'TJM',
-            ])
-            ->add('status', TextType::class, [
-                'mapped' => false,
-                'label' => 'status',
             ])
             ->add('niveau', TextType::class, [
                 'mapped' => false,

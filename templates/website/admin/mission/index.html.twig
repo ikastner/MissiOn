@@ -15,16 +15,23 @@
               <th>fin</th>
               <th>estimation</th>
               <th>tjm</th>
+              <th>niveau</th>
+              {# <th>taille_projet</th> #}
+              <th>status</th>
             </tr>
         </thead>
         <tbody>
             {% for mission in missions %}
                 <tr>
+                    <td> {{ mission.title }} </td>
                     <td> {{ mission.description }} </td>
-                    <td> {{ mission.debut }} </td>
-                    <td> {{ mission.fin }} </td>
+                    <td> {{ mission.debut|date('d/m/Y') }} </td>
+                    <td> {{ mission.fin|date('d/m/Y') }} </td>
                     <td> {{ mission.estimation }} </td>
                     <td> {{ mission.tjm }} </td>
+                    <td> {{ mission.niveau }} </td>
+                    {# <td> {{ mission.taille_projet }} </td> #}
+                    <td> {{ mission.status }} </td>
                     
                 </tr>
             {% else %}
