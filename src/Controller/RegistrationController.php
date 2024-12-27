@@ -95,6 +95,7 @@ class RegistrationController extends AbstractController
                     $entreprise->setContact($form->get('entreprise_contact')->getData());
 
                     $gestionnaire = new Gestionnaire();
+                    $gestionnaire->setName($form->get('gestionnaire_nom')->getData());
                     $gestionnaire->setEmail($userEmail);
                     $gestionnaire->setEntreprise($entreprise);
 

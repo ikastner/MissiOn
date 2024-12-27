@@ -11,6 +11,7 @@
             <tr>
               <th>Titre</th>
               <th>description</th>
+              <th>Personnel</th>
               <th>debut</th>
               <th>fin</th>
               <th>estimation</th>
@@ -25,6 +26,7 @@
                 <tr>
                     <td> {{ mission.title }} </td>
                     <td> {{ mission.description }} </td>
+                    <td> {{ mission.Personel.email }} </td>
                     <td> {{ mission.debut|date('d/m/Y') }} </td>
                     <td> {{ mission.fin|date('d/m/Y') }} </td>
                     <td> {{ mission.estimation }} </td>
@@ -35,7 +37,7 @@
                     
                 </tr>
             {% else %}
-            <td>Aucune mission disponible</td>
+            <td colspan="8">Aucune mission disponible</td>
             {% endfor %}
         </tbody>
       </table>

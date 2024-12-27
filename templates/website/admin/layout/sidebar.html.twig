@@ -46,37 +46,16 @@
                         <li class="sidebar-item">
                             <a href="{{ path('missions_list') }}" class="sidebar-link">Tous les missions</a>
                         </li>
-                        <li class="sidebar-item">
-                            <a href="" class="sidebar-link">Missions en cours</a>
-                        </li>
-                        <li class="sidebar-item">
-                            <a href="" class="sidebar-link">Missions finies</a>
-                        </li>
                     </ul>
                 </li>
-                {# <li class="sidebar-item">
-                    <a href="#" class="sidebar-link collapsed has-dropdown" data-bs-toggle="collapse"
-                        data-bs-target="#multi" aria-expanded="false" aria-controls="multi">
-                        <i class="lni lni-layout"></i>
-                        <span>Multi Level</span>
+                {% if app.user and is_granted('ROLE_PERSONNEL') %}
+                <li class="sidebar-item">
+                    <a href="{{path('app_candidature')}}" class="sidebar-link">
+                        <i class="lni lni-checkmark-circle"></i>
+                        <span>Candidature</span>
                     </a>
-                    <ul id="multi" class="sidebar-dropdown list-unstyled collapse" data-bs-parent="#sidebar">
-                        <li class="sidebar-item">
-                            <a href="#" class="sidebar-link collapsed" data-bs-toggle="collapse"
-                                data-bs-target="#multi-two" aria-expanded="false" aria-controls="multi-two">
-                                Two Links
-                            </a>
-                            <ul id="multi-two" class="sidebar-dropdown list-unstyled collapse">
-                                <li class="sidebar-item">
-                                    <a href="#" class="sidebar-link">Link 1</a>
-                                </li>
-                                <li class="sidebar-item">
-                                    <a href="#" class="sidebar-link">Link 2</a>
-                                </li>
-                            </ul>
-                        </li>
-                    </ul>
-                </li> #}
+                </li>
+                {% endif %}
                 <li class="sidebar-item">
                     <a href="#" class="sidebar-link">
                         <i class="lni lni-popup"></i>

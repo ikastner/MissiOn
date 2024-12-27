@@ -36,3 +36,7 @@ candidature_postuler:
     path: /mission/{id}/postuler
     controller: App\Controller\CandidatureController::postuler
     methods: [POST]
+
+candidature_validate:
+    path: /admin/candidature/{id}/edit
+    controller: App\Controller\CandidatureController::validate

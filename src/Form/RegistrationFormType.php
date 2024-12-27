@@ -52,6 +52,10 @@ class RegistrationFormType extends AbstractType
             // Ajoute les champs d'entreprise si le type est "gestionnaire"
             if ($options['user_type'] === 'gestionnaire') {
                 $builder
+                    ->add('gestionnaire_nom', TextType::class, [
+                        'mapped' => false,
+                        'label' => 'Nom du gestionnaire',
+                    ])
                     ->add('entreprise_nom', TextType::class, [
                         'mapped' => false,
                         'label' => 'Nom de l\'entreprise',

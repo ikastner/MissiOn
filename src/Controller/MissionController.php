@@ -3,6 +3,7 @@
 namespace App\Controller;
 
 use App\Entity\Missions;
+use App\Entity\Personel;
 use App\Form\MissionsType;
 use Doctrine\ORM\EntityManagerInterface;
 use Symfony\Bundle\FrameworkBundle\Controller\AbstractController;
@@ -56,7 +57,47 @@ class MissionController extends AbstractController
     #[Route('/admin/mission', name: 'missions_list')]
     public function list_missions(EntityManagerInterface $entityManager): Response
     {
-        $missions = $entityManager->getRepository(Missions::class)->findAll();
+        $user = $this->getUser();
+
+        //  Si l'utilisateur est un gestionnaire
+        if (in_array('ROLE_GESTIONNAIRE', $user->getRoles())) {
+            // Récupération du Gestionnaire associée
+            $gestionnaire = $user->getGestionnaire();
+
+            // if (!$gestionnaire) {
+            //     throw $this->createAccessDeniedException('Aucune entité Gestionnaire associée à cet utilisateur.');
+            // }
+
+            // Récupérer toutes les missions de l'entreprise associée au gestionnaire
+            $entreprise = $gestionnaire->getEntreprise();
+
+            // if (!$entreprise) {
+            //     throw $this->createAccessDeniedException('Aucune entreprise associée à ce gestionnaire.');
+            // }
+            // Récupérer tous les personnels de l'entreprise
+            $personels = $entityManager->getRepository(Personel::class)->findBy([
+                'entreprise' => $entreprise,
+            ]);
+
+            // Récupérer les missions créées par ces personnels
+            $missions = $entityManager->getRepository(Missions::class)->createQueryBuilder('m')
+                ->where('m.personel IN (:personels)')
+                ->setParameter('personels', $personels)
+                ->getQuery()
+                ->getResult();
+            } else {
+                // Si l'utilisateur est un personnel
+                $personel = $user->getPersonel();
+
+                // if (!$personel) {
+                //     throw $this->createAccessDeniedException('Vous devez être un personnel pour accéder à cette page.');
+                // }
+
+            // Récupérer uniquement les missions du personnel connecté
+            $missions = $entityManager->getRepository(Missions::class)->findBy([
+                'personel' => $personel,
+            ]);
+        }
 
         return $this->render('website/admin/mission/index.html.twig', [
             'missions' => $missions,

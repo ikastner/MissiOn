@@ -15,7 +15,16 @@ class PersonelController extends AbstractController
     #[Route('/admin/personel/list', name: 'personels_list')]
     public function list_personel(EntityManagerInterface $entityManager): Response
     {
-        $personels = $entityManager->getRepository(Personel::class)->findAll();
+         $user = $this->getUser();
+         $gestionnaire = $user->getGestionnaire();
+
+        $entreprise = $gestionnaire->getEntreprise();
+
+     // Récupérer uniquement les missions du personnel connecté
+     $personels = $entityManager->getRepository(Personel::class)->findBy([
+         'entreprise' => $entreprise,
+     ]);
+        // $personels = $entityManager->getRepository(Personel::class)->findAll();
 
         return $this->render('website/admin/personnel/index.html.twig', [
             'personels' => $personels,

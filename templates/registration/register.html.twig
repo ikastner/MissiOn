@@ -36,6 +36,12 @@
 
             {{ form_start(registrationForm, {'attr': {'class': 'needs-validation'}}) }}
 
+            {% if registrationForm.entreprise_nom is defined %}
+                <div class="mb-3">
+                    {{ form_row(registrationForm.gestionnaire_nom, {'attr': {'class': 'form-control'}}) }}
+                </div>
+            {% endif %}
+
             <div class="mb-3">
                 {{ form_row(registrationForm.email, {'attr': {'class': 'form-control'}}) }}
             </div>
@@ -47,9 +53,7 @@
                 }) }}
             </div>
 
-            <div class="mb-3 form-check">
-                {{ form_row(registrationForm.agreeTerms, {'attr': {'class': 'form-check-input'}}) }}
-            </div>
+           
 
             {% if registrationForm.entreprise_nom is defined %}
                 <div class="mb-3">
@@ -103,6 +107,9 @@
                     {{ form_row(registrationForm.personel_contact, {'attr': {'class': 'form-control'}}) }}
                 </div>
             {% endif %} #}
+             <div class="mb-3 form-check">
+                {{ form_row(registrationForm.agreeTerms, {'attr': {'class': 'form-check-input'}}) }}
+            </div>
 
             <button type="submit" class="btn btn-lg w-100" style="background-color: #28a745; color: white;">Confirmer</button>
 

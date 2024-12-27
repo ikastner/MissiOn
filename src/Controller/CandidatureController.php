@@ -14,10 +14,28 @@ use Symfony\Component\Routing\Attribute\Route;
 class CandidatureController extends AbstractController
 {
     #[Route('/candidature', name: 'app_candidature')]
-    public function index(): Response
+    public function index(EntityManagerInterface $entityManager): Response
     {
-        return $this->render('candidature/index.html.twig', [
-            'controller_name' => 'CandidatureController',
+        $user = $this->getUser();
+        $personel = $user->getPersonel();
+
+        // Récupérer les candidatures des missions créées par le personnel connecté
+        $candidatures = $entityManager->createQueryBuilder()
+        ->select('c')
+        ->from(Candidature::class, 'c')
+        ->join('c.mission', 'm')
+        ->where('m.personel = :personel')
+        ->andWhere('c.accepte = :accepte')
+        ->setParameter('personel', $personel)
+        ->setParameter('accepte', 0)
+        ->getQuery()
+        ->getResult();
+        // $candidatures = $entityManager->getRepository(Candidature::class)->findBy([
+        //     'accepte' => 0
+        // ]);
+
+        return $this->render('website/admin/candidature/candidature.html.twig', [
+            'candidatures' => $candidatures,
         ]);
     }
 
@@ -64,6 +82,37 @@ class CandidatureController extends AbstractController
         $this->addFlash('success', 'Votre candidature a été enregistrée avec succès.');
 
         return $this->redirectToRoute('mission_detail', ['id' => $mission->getId()]);
+
+    }
+
+
+    public function validate(EntityManagerInterface $entityManager, int $id,): Response
+    {
+        $candidature = $entityManager->getRepository(Candidature::class)->find($id);
+
+        $candidature->setAccepte(true);
+
+        $mission = $candidature->getMission();
+        $mission->setStatus('En cours');
+        
+        // l'ensemble des missions de même id qui ne sont pas acceptées
+        $candidaturesNonAcceptees = $entityManager->getRepository(Candidature::class)->findBy([
+            'mission' => $mission,
+            'accepte' => false,
+        ]);
+
+        // suppression des candidatures qui le même mission
+        foreach ($candidaturesNonAcceptees as $nonAcceptee) {
+            $entityManager->remove($nonAcceptee);
+        }
+
+        $entityManager->persist($candidature);
+        $entityManager->persist($mission);
+        $entityManager->flush();
+
+        $this->addFlash('success', 'La candidature a été validée avec succès.');
+
+        return $this->redirectToRoute('app_candidature');
 
     }
 }

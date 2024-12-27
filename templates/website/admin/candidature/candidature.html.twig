@@ -1,0 +1,53 @@
+{% extends 'website/admin/layout/base.html.twig' %}
+
+{% block title %}Candidatures{% endblock %}
+
+{% block body %}
+    <h1>Candidatures</h1>
+    {% for label, messages in app.flashes %}
+    {% for message in messages %}
+        <div class="alert alert-{{ label }}">
+            {{ message }}
+        </div>
+    {% endfor %}
+    {% endfor %}
+    <div class="card">
+    <div class="card-body">
+      <table id="example1" class="table table-bordered table-striped">
+        <thead>
+            <tr>
+              <th>Freelance</th>
+              <th>Mission</th>
+              <th>Date de candidature</th>
+              <th>Action</th>
+            </tr>
+        </thead>
+        <tbody>
+            {% for candidature in candidatures %}
+            <tr>
+                <td>{{ candidature.Freelance.email }}</td>
+                <td>{{ candidature.Mission.title }}</td>
+                <td>{{ candidature.date|date('d/m/Y') }}</td>
+                <td>
+                    <a href="{{ path('candidature_validate', {id: candidature.id}) }}" class="d-inline">
+                        <button class="btn btn-success">Valider</button>
+                    </a>
+                    {# <form method="post" action="{{ path('personel_delete', {id: personel.id}) }}" onsubmit="return confirm('Voulez-vous vraiment supprimer ce personnel ?');" class="d-inline">
+                        <input type="hidden" name="_method" value="DELETE">
+                        <input type="hidden" name="_token" value="{{ csrf_token('delete' ~ personel.id) }}">
+                        <button type="submit" class="btn btn-danger">Supprimer</button>
+                    </form> #}
+                </td>
+            </tr>
+            {% else %}
+            <tr>
+                <td colspan="4">Aucune en cours</td>
+            </tr>
+            {% endfor %}
+        </tbody>
+      </table>
+    </div>
+    <!-- /.card-body -->
+</div>
+    
+{% endblock %}
