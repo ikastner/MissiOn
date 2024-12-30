@@ -53,6 +53,14 @@ class WebsiteController extends AbstractController
         ]);
     }
 
+    #[Route('/freelance', name: 'app_freelance')]
+    public function freelance(): Response
+    {
+        return $this->render('website/freelance/index.html.twig', [
+            'controller_name' => 'WebsiteController',
+        ]);
+    }
+
     #[Route('/admin/find-freelance', name: 'app_find_freelance')]
     public function findFreelance( EntityManagerInterface $entityManager): Response
     {

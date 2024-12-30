@@ -1,0 +1,59 @@
+<aside id="sidebar">
+            <div class="d-flex">
+                <button class="toggle-btn" type="button">
+                    <i class="lni lni-grid-alt"></i>
+                </button>
+                <div class="sidebar-logo">
+                    <a href="#">MissiOn</a>
+                </div>
+            </div>
+            <ul class="sidebar-nav">
+                <li class="sidebar-item">
+                    <a href="{{path('app_freelance')}}" class="sidebar-link">
+                        <i class="lni lni-home"></i>
+                        <span>Accueil</span>
+                    </a>
+                </li>
+                <li class="sidebar-item">
+                    <a href="{{path('missions_list_freelance')}}" class="sidebar-link">
+                        <i class="lni lni-cog"></i>
+                        <span>Missions</span>
+                    </a>
+                </li>
+                {# <li class="sidebar-item">
+                    <a href="#" class="sidebar-link collapsed has-dropdown" data-bs-toggle="collapse"
+                        data-bs-target="#auth" aria-expanded="false" aria-controls="auth">
+                        <i class="lni lni-cog"></i>
+                        <span>Missions</span>
+                    </a>
+                    <ul id="auth" class="sidebar-dropdown list-unstyled collapse" data-bs-parent="#sidebar">
+                        {% if app.user and is_granted('ROLE_PERSONNEL') %}
+                        <li class="sidebar-item">
+                            <a href="{{ path('create_missions') }}" class="sidebar-link">Ajouter des missions</a>
+                        </li>
+                        {% endif %}
+                        <li class="sidebar-item">
+                            <a href="{{ path('missions_list') }}" class="sidebar-link">Tous les missions</a>
+                        </li>
+                    </ul>
+                </li> #}
+                <li class="sidebar-item">
+                    <a href="{{path('app_freelance_candidature')}}" class="sidebar-link">
+                        <i class="lni lni-checkmark-circle"></i>
+                        <span>Mes Candidature</span>
+                    </a>
+                </li>
+                <li class="sidebar-item">
+                    <a href="#" class="sidebar-link">
+                        <i class="lni lni-popup"></i>
+                        <span>Notification</span>
+                    </a>
+                </li>
+            </ul>
+            <div class="sidebar-footer">
+                <a href="{{ path('app_logout') }}" class="sidebar-link">
+                    <i class="lni lni-exit"></i>
+                    <span>Déconnexion</span>
+                </a>
+            </div>
+        </aside>

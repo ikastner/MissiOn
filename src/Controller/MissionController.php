@@ -64,16 +64,9 @@ class MissionController extends AbstractController
             // Récupération du Gestionnaire associée
             $gestionnaire = $user->getGestionnaire();
 
-            // if (!$gestionnaire) {
-            //     throw $this->createAccessDeniedException('Aucune entité Gestionnaire associée à cet utilisateur.');
-            // }
-
             // Récupérer toutes les missions de l'entreprise associée au gestionnaire
             $entreprise = $gestionnaire->getEntreprise();
 
-            // if (!$entreprise) {
-            //     throw $this->createAccessDeniedException('Aucune entreprise associée à ce gestionnaire.');
-            // }
             // Récupérer tous les personnels de l'entreprise
             $personels = $entityManager->getRepository(Personel::class)->findBy([
                 'entreprise' => $entreprise,
@@ -89,18 +82,23 @@ class MissionController extends AbstractController
                 // Si l'utilisateur est un personnel
                 $personel = $user->getPersonel();
 
-                // if (!$personel) {
-                //     throw $this->createAccessDeniedException('Vous devez être un personnel pour accéder à cette page.');
-                // }
-
             // Récupérer uniquement les missions du personnel connecté
             $missions = $entityManager->getRepository(Missions::class)->findBy([
                 'personel' => $personel,
             ]);
         }
-
         return $this->render('website/admin/mission/index.html.twig', [
             'missions' => $missions,
+        ]);
+    }
+
+    #[Route('/freelance/mission', name: 'missions_list_freelance')]
+    public function list_missions_freelance(EntityManagerInterface $entityManager): Response
+    {
+        $missions = $entityManager->getRepository(Missions::class)->findAll();
+
+        return $this->render('website/freelance/mission/missions.html.twig', [
+            'missions'=>$missions,
         ]);
     }
 

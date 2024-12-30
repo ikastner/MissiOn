@@ -39,14 +39,14 @@ class CandidatureController extends AbstractController
         ]);
     }
 
-    #[Route('/mission-detail', name: 'mission_detail')]
-    public function detail_mission(EntityManagerInterface $entityManager): Response
-    {
-        $missions = $entityManager->getRepository(Missions::class)->findAll();
-        return $this->render('website/mission_detail.html.twig', [
-            'missions'=>$missions,
-        ]);
-    }
+    // #[Route('/mission-detail', name: 'mission_detail')]
+    // public function detail_mission(EntityManagerInterface $entityManager): Response
+    // {
+    //     $missions = $entityManager->getRepository(Missions::class)->findAll();
+    //     return $this->render('website/mission_detail.html.twig', [
+    //         'missions'=>$missions,
+    //     ]);
+    // }
 
     public function postuler(Request $request, EntityManagerInterface $entityManager, CandidatureRepository $candidatureRepository): Response
     {
@@ -67,7 +67,7 @@ class CandidatureController extends AbstractController
         $existingCandidature = $candidatureRepository->findOneByFreelanceAndMission($freelance->getId(), $mission->getId());
         if ($existingCandidature) {
             $this->addFlash('error', 'Vous avez déjà postulé pour cette mission.');
-            return $this->redirectToRoute('mission_detail', ['id' => $mission->getId()]);
+            return $this->redirectToRoute('missions_list_freelance', ['id' => $mission->getId()]);
         }
 
         $candidature = new Candidature();
@@ -81,7 +81,7 @@ class CandidatureController extends AbstractController
 
         $this->addFlash('success', 'Votre candidature a été enregistrée avec succès.');
 
-        return $this->redirectToRoute('mission_detail', ['id' => $mission->getId()]);
+        return $this->redirectToRoute('missions_list_freelance', ['id' => $mission->getId()]);
 
     }
 
@@ -114,5 +114,20 @@ class CandidatureController extends AbstractController
 
         return $this->redirectToRoute('app_candidature');
 
+    }
+
+    #[Route('/freelance/candidature', name: 'app_freelance_candidature')]
+    public function freelance_candidature(EntityManagerInterface $entityManager): Response
+    {
+        $user = $this->getUser();
+        $freelance = $user->getFreelance();
+        
+        $candidatures = $entityManager->getRepository(Candidature::class)->findBy([
+            'freelance' => $freelance,
+        ]);
+
+        return $this->render('website/freelance/candidature/candidature.html.twig', [
+            'candidatures' => $candidatures,
+        ]);
     }
 }
