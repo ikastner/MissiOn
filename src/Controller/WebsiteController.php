@@ -3,9 +3,11 @@
 namespace App\Controller;
 
 use App\Entity\Freelance;
+use App\Repository\FreelanceRepository;
 use Doctrine\ORM\EntityManagerInterface;
 use Symfony\Bundle\FrameworkBundle\Controller\AbstractController;
 use Symfony\Bundle\SecurityBundle\Security;
+use Symfony\Component\HttpFoundation\Request;
 use Symfony\Component\HttpFoundation\Response;
 use Symfony\Component\Routing\Attribute\Route;
 
@@ -62,9 +64,16 @@ class WebsiteController extends AbstractController
     }
 
     #[Route('/admin/find-freelance', name: 'app_find_freelance')]
-    public function findFreelance( EntityManagerInterface $entityManager): Response
+    public function findFreelance( Request $request, FreelanceRepository $freelanceRepository): Response
     {
-        $freelances = $entityManager->getRepository(Freelance::class)->findAll();
+        $filters = [
+            'TJM' => $request->query->get('TJM'),
+            'pays' => $request->query->get('pays'),
+            'ville' => $request->query->get('ville'),
+            'search' => $request->query->get('search'),
+        ];
+
+        $freelances = $freelanceRepository->findByFilters($filters);
 
         return $this->render('website/admin/find_freelance/search_freelance.html.twig', [
             'freelances' => $freelances,

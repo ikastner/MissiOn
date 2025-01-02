@@ -16,28 +16,32 @@ class FreelanceRepository extends ServiceEntityRepository
         parent::__construct($registry, Freelance::class);
     }
 
-    //    /**
-    //     * @return Freelance[] Returns an array of Freelance objects
-    //     */
-    //    public function findByExampleField($value): array
-    //    {
-    //        return $this->createQueryBuilder('f')
-    //            ->andWhere('f.exampleField = :val')
-    //            ->setParameter('val', $value)
-    //            ->orderBy('f.id', 'ASC')
-    //            ->setMaxResults(10)
-    //            ->getQuery()
-    //            ->getResult()
-    //        ;
-    //    }
+    public function findByFilters(array $filters)
+    {
+        $queryb = $this->createQueryBuilder('f');
 
-    //    public function findOneBySomeField($value): ?Freelance
-    //    {
-    //        return $this->createQueryBuilder('f')
-    //            ->andWhere('f.exampleField = :val')
-    //            ->setParameter('val', $value)
-    //            ->getQuery()
-    //            ->getOneOrNullResult()
-    //        ;
-    //    }
+        if (!empty($filters['TJM'])) {
+            $queryb->andWhere('f.TJM <= :TJM')
+               ->setParameter('TJM', $filters['TJM']);
+        }
+
+        if (!empty($filters['pays'])) {
+            $queryb->andWhere('f.pays = :pays')
+               ->setParameter('pays', $filters['pays']);
+        }
+
+        if (!empty($filters['ville'])) {
+            $queryb->andWhere('f.ville = :ville')
+               ->setParameter('ville', $filters['ville']);
+        }
+
+        if (!empty($filters['search'])) {
+            $queryb->andWhere('f.nom LIKE :search OR f.titre LIKE :search')
+               ->setParameter('search', '%' . $filters['search'] . '%');
+        }
+
+        return $queryb->getQuery()->getResult();
+    }
+
+   
 }

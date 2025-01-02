@@ -1,97 +1,89 @@
 {% extends 'website/admin/layout/base.html.twig' %}
 
+
 {% block title %}Trouver des Freelances{% endblock %}
 
-{# {% block stylesheets %}
+{% block stylesheets %}
     {{ parent() }}
     <style>
-        body { font-family: Arial, sans-serif; background-color: #fff; margin: 0; padding: 0; }
+        {# body { font-family: Arial, sans-serif; background-color: #fff; margin: 0; padding: 0; } #}
+        .freelance-wrapper { display: flex; max-width: 1400px; margin: 0 auto; padding: 10px; }
+        .filters { width: 30%; padding: 10px; background-color: #fff; margin-right: 10px; }
+        .content { width: 70%; padding-left: 10px; }
+        .search-bar { background-color: #f9f9f9; padding: 15px; border-radius: 8px; margin-bottom: 15px; }
+        .search-input { width: 100%; padding: 10px; border: 1px solid #ddd; border-radius: 4px; }
+        .freelance-list { display: flex; flex-direction: column; gap: 15px; }
         .freelance-card { background-color: #f9f9f9; border-radius: 8px; padding: 15px; box-shadow: 0 1px 3px rgba(0,0,0,0.1); display: flex; justify-content: space-between; }
-        .freelance-info h2 { margin-top: 0; color: #14a800; }
-        .freelance-info .title { color: #5e6d55; font-size: 0.9em; margin-bottom: 8px; }
+        .freelance-info { flex: 1; }
+        .freelance-info h2 { margin-top: 0; color: #28a745; }
         .freelance-info .rate { font-weight: bold; margin-bottom: 8px; }
-        .freelance-info .location { color: #5e6d55; font-size: 0.9em; }
-        .freelance-info .bio { margin-top: 8px; font-size: 0.9em; }
-        .btn { text-align: center; text-decoration: none; }
-        .btn-invite { background-color: #14a800; color: white; }
+        .freelance-info .location { color: #5e6d55; font-size: 0.9em; margin-bottom: 8px; }
+        .freelance-info .biography { margin-top: 8px; font-size: 0.9em; }
+        .freelance-actions { display: flex; flex-direction: column; justify-content: center; gap: 8px; }
+        .btn { padding: 8px 12px; border: none; border-radius: 4px; cursor: pointer; text-align: center; text-decoration: none; }
+        .btn-invite { background-color: #28a745; color: white; }
         .btn-details { background-color: #e9e9e9; color: #333; }
+        /* Styles pour les filtres */
+        .filters form { display: flex; flex-direction: column; gap: 10px; }
+        .filters label { font-weight: bold; }
+        .filters input, .filters select { width: 100%; padding: 8px; border: 1px solid #ddd; border-radius: 4px; }
     </style>
-{% endblock %} #}
+{% endblock %}
 
 {% block body %}
-<div class="container my-4">
-    <div class="row">
-        <!-- Filters Section -->
-        <div class="col-md-4">
-            <div class="card shadow-sm">
-                <div class="card-header bg-light">
-                    <h5 class="mb-0">Filtres</h5>
-                </div>
-                <div class="card-body">
-                    <form>
-                        <div class="mb-3">
-                            <label for="tjm" class="form-label">TJM maximum :</label>
-                            <input type="number" id="tjm" name="tjm" class="form-control">
-                        </div>
+<div class="container freelance-wrapper">
+    <!-- Filters Section -->
+    <div class="filters">
+        <h2>Filtres</h2>
+        <form method="get" action="{{ path('app_find_freelance') }}">
+            <label for="TJM">TJM maximum :</label>
+            <input type="number" id="TJM" name="TJM" placeholder="Ex : 5000 €" value="{{ app.request.query.get('TJM') }}">
 
-                        <div class="mb-3">
-                            <label for="pays" class="form-label">Pays :</label>
-                            <select id="pays" name="pays" class="form-select">
-                                <option value="">Tous</option>
-                                <!-- Ajoutez les options de pays -->
-                            </select>
-                        </div>
+            <label for="pays">Pays :</label>
+            <input type="text" id="pays" name="pays" placeholder="France" value="{{ app.request.query.get('pays') }}">
 
-                        <div class="mb-3">
-                            <label for="competences" class="form-label">Compétences :</label>
-                            <input type="text" id="competences" name="competences" class="form-control">
-                        </div>
+            <label for="ville">Ville :</label>
+            <input type="text" id="ville" name="ville" placeholder="Paris" value="{{ app.request.query.get('ville') }}">
 
-                        <button type="submit" class="btn btn-primary w-100">Appliquer les filtres</button>
-                    </form>
-                </div>
-            </div>
+            <button type="submit" class="btn btn-invite">Appliquer les filtres</button>
+        </form>
+    </div>
+
+    <!-- Content Section -->
+    <div class="content">
+        <h1>Parcourir les Freelances</h1>
+
+        <!-- Search Bar -->
+        <div class="search-bar">
+            <form method="get" action="{{ path('app_find_freelance') }}">
+                <input type="text" class="search-input" name="search" placeholder="Rechercher des freelances..." value="{{ app.request.query.get('search') }}">
+            </form>
         </div>
 
-        <!-- Content Section -->
-        <div class="col-md-8">
-            <h1 class="mb-4">Parcourir les Freelances</h1>
-
-            <!-- Search Bar -->
-            <div class="input-group mb-4">
-                <input type="text" class="form-control" placeholder="Rechercher des freelances...">
-                <button class="btn btn-outline-secondary">Rechercher</button>
-            </div>
-
-            <!-- Freelance List -->
-            {% if freelances is defined and freelances|length > 0 %}
-                <div class="row gy-4">
-                    {% for freelance in freelances %}
-                        <div class="col-12">
-                            <div class="card freelance-card">
-                                <div class="card-body">
-                                    <h5 class="card-title text-success">{{ freelance.nom }}</h5>
-                                    <h6 class="card-subtitle text-muted">{{ freelance.titre }}</h6>
-                                    <p class="card-text mb-1"><strong>{{ freelance.TJM }} € / jour</strong></p>
-                                    <p class="card-text text-muted mb-2">{{ freelance.ville }}, {{ freelance.pays }}</p>
-                                    {% if freelance.biographie %}
-                                        <p class="card-text">{{ freelance.biographie|slice(0, 100) }}{% if freelance.biographie|length > 100 %}...{% endif %}</p>
-                                    {% endif %}
-                                </div>
-                                <div class="card-footer d-flex justify-content-end gap-2">
-                                    <a href="#" class="btn btn-sm btn-success">Inviter à l'emploi</a>
-                                    <a href="#" class="btn btn-sm btn-secondary">Détails</a>
-                                </div>
-                            </div>
+        <!-- Freelance List -->
+        {% if freelances is defined and freelances|length > 0 %}
+            <div class="freelance-list">
+                {% for freelance in freelances %}
+                    <div class="freelance-card">
+                        <div class="freelance-info">
+                            <h2>{{ freelance.nom }}</h2>
+                            <div class="rate">TJM : {{ freelance.TJM }} € / jour</div>
+                            <div class="location">{{ freelance.ville }}, {{ freelance.pays }}</div>
+                            {% if freelance.biographie %}
+                                <div class="biography">{{ freelance.biographie|slice(0, 100) }}{% if freelance.biographie|length > 100 %}...{% endif %}</div>
+                            {% endif %}
                         </div>
-                    {% endfor %}
-                </div>
-            {% else %}
-                <div class="alert alert-info" role="alert">
-                    Aucun freelance n'est disponible pour le moment.
-                </div>
-            {% endif %}
-        </div>
+                        <div class="freelance-actions">
+                            <a href="#" class="btn btn-invite">Inviter à l'emploi</a>
+                            <a href="#" class="btn btn-details">Détails</a>
+                        </div>
+                    </div>
+                {% endfor %}
+            </div>
+        {% else %}
+            <p>Aucun freelance disponible pour le moment.</p>
+        {% endif %}
     </div>
 </div>
 {% endblock %}
+
