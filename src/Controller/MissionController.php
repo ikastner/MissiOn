@@ -5,6 +5,7 @@ namespace App\Controller;
 use App\Entity\Missions;
 use App\Entity\Personel;
 use App\Form\MissionsType;
+use App\Repository\MissionsRepository;
 use Doctrine\ORM\EntityManagerInterface;
 use Symfony\Bundle\FrameworkBundle\Controller\AbstractController;
 use Symfony\Component\HttpFoundation\Request;
@@ -99,6 +100,22 @@ class MissionController extends AbstractController
 
         return $this->render('website/freelance/mission/missions.html.twig', [
             'missions'=>$missions,
+        ]);
+    }
+
+    #[Route('/missions/filter', name: 'missions_filter')]
+    public function filterMissions(Request $request, MissionsRepository $missionRepository): Response
+    {
+        $filters = [
+            'tjm' => $request->query->get('tjm'),
+            'niveau' => $request->query->get('niveau'),
+            'search' => $request->query->get('search'),
+        ];
+
+        $missions = $missionRepository->findByFilters($filters);
+
+        return $this->render('website/freelance/mission/missions.html.twig', [
+            'missions' => $missions,
         ]);
     }
 

@@ -44,18 +44,22 @@
     <div class="container mission-wrapper">
         <div class="filters">
             <h2>Filtres</h2>
-            <form>
+            <form method="get" action="{{ path('missions_filter') }}">
                 <label for="tjm">TJM maximum :</label>
-                <input type="number" id="budget" name="budget" placeholder="Ex : 5000 €">
+                <input type="number" id="budget" name="tjm" placeholder="Ex : 5000 €" value="{{ app.request.query.get('tjm') }}">
 
-                {# <label for="pays">Pays :</label>
-                <select id="pays" name="pays">
+                <label for="niveau">Niveau requis :</label>
+                <select id="niveau" name="niveau">
                     <option value="">Tous</option>
-                    <!-- Ajoutez les options de pays -->
-                </select> #}
+                    <option value="BAC+1" {{ app.request.query.get('niveau') == 'BAC+1' ? 'selected' : '' }}>BAC+1</option>
+                    <option value="BAC+2" {{ app.request.query.get('niveau') == 'BAC+2' ? 'selected' : '' }}>BAC+2</option>
+                    <option value="BAC+3" {{ app.request.query.get('niveau') == 'BAC+3' ? 'selected' : '' }}>BAC+3</option>
+                    <option value="BAC+4" {{ app.request.query.get('niveau') == 'BAC+4' ? 'selected' : '' }}>BAC+4</option>
+                    <option value="BAC+5" {{ app.request.query.get('niveau') == 'BAC+5' ? 'selected' : '' }}>BAC+5</option>
+                </select>
 
-                <label for="competences">Compétences requises :</label>
-                <input type="text" id="competences" name="competences" placeholder="Ex : Développement, Marketing">
+                {# <label for="competences">Compétences requises :</label>
+                <input type="text" id="competences" name="competences" placeholder="Ex : Développement, Marketing" value="{{ app.request.query.get('competences') }}"> #}
 
                 <button type="submit" class="btn btn-apply">Appliquer les filtres</button>
             </form>
@@ -65,7 +69,9 @@
             <h1>Parcourir les Missions</h1>
 
             <div class="search-bar">
-                <input type="text" class="search-input" placeholder="Rechercher des missions...">
+                <form method="get" action="{{ path('missions_filter') }}">
+                    <input type="text" class="search-input" name="search" placeholder="Rechercher des missions..." value="{{ app.request.query.get('search') }}">
+                </form>
             </div>
 
             {% if missions is defined and missions|length > 0 %}
