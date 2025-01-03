@@ -2,6 +2,7 @@
 
 namespace App\Controller;
 
+use App\Entity\Competence;
 use App\Entity\Missions;
 use App\Entity\Personel;
 use App\Form\MissionsType;
@@ -30,6 +31,7 @@ class MissionController extends AbstractController
         }
 
         if ($form->isSubmitted() && $form->isValid()) {
+
             $mission->setPersonel($personel);
             $mission->setTitle($form->get('title')->getData());
             $mission->setDescription($form->get('description')->getData());
@@ -40,6 +42,19 @@ class MissionController extends AbstractController
             $mission->setStatus('attente');
             $mission->setNiveau($form->get('niveau')->getData());
             $mission->setTailleProjet($form->get('taille_projet')->getData());
+
+            $competencesInput = $form->get('competences')->getData();
+
+            // transformer les compétences en tableau
+            $competenceNames = array_map('trim', explode(',', $competencesInput));
+
+            foreach ($competenceNames as $name) {
+                $competence = new Competence();
+                $competence->setName($name);
+    
+                $competence->addMission($mission); 
+                $entityManager->persist($competence);
+            }
 
             $entityManager->persist($mission);
             $entityManager->flush();
@@ -110,12 +125,31 @@ class MissionController extends AbstractController
             'tjm' => $request->query->get('tjm'),
             'niveau' => $request->query->get('niveau'),
             'search' => $request->query->get('search'),
+            'competences' => $request->query->get('competences')
         ];
+
+        // Si le champ des compétences contient des valeurs, on le transforme en un tableau
+        if (!empty($filters['competences'])) {
+            $filters['competences'] = array_map('trim', explode(',', $filters['competences']));
+        } else {
+            $filters['competences'] = [];
+        }
 
         $missions = $missionRepository->findByFilters($filters);
 
         return $this->render('website/freelance/mission/missions.html.twig', [
             'missions' => $missions,
+        ]);
+    }
+
+    #[Route('/missions/{id}/detail', name: 'mission_detail')]
+    public function detail($id, MissionsRepository $missionRepository)
+    {
+        // Récupérer la mission par son ID
+        $mission = $missionRepository->find($id);
+
+        return $this->render('website/freelance/mission/detail_mission.html.twig', [
+            'mission' => $mission,
         ]);
     }
 

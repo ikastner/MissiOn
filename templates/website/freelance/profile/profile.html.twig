@@ -1,0 +1,126 @@
+{% extends 'website/freelance/layout/base.html.twig' %}
+
+{% block title %}Profil Freelance{% endblock %}
+
+{% block body %}
+{% for message in app.flashes('success') %}
+    <div class="alert alert-success">{{ message }}</div>
+{% endfor %}
+
+{% for message in app.flashes('warning') %}
+    <div class="alert alert-warning">{{ message }}</div>
+{% endfor %}
+<div class="container mt-5">
+    <h1 class="mb-4">Profil</h1>
+
+    <div class="card mb-4">
+        <div class="card-body">
+            <h2 class="card-title">Informations personnelles</h2>
+            <ul class="list-group">
+                <li class="list-group-item"><strong>Nom :</strong> {{ app.user.freelance.nom }}</li>
+                <li class="list-group-item"><strong>Email :</strong> {{ app.user.email }}</li>
+                <li class="list-group-item"><strong>Titre :</strong> {{ app.user.freelance.titre }}</li>
+                <li class="list-group-item"><strong>TJM :</strong> {{ app.user.freelance.TJM }}</li>
+                <li class="list-group-item"><strong>Pays :</strong> {{ app.user.freelance.pays }}</li>
+                <li class="list-group-item"><strong>Ville :</strong> {{ app.user.freelance.ville }}</li>
+                <li class="list-group-item"><strong>Biographie :</strong> {{ app.user.freelance.biographie }}</li>
+                <li class="list-group-item"><strong>Date de naissance :</strong> {{ app.user.freelance.dateNaissance|date('d/m/Y') }}</li>
+            </ul>
+        </div>
+    </div>
+
+    <div class="card mb-4">
+        <div class="card-body">
+            <h2 class="card-title">Compétences</h2>
+            <ul class="list-group mb-3">
+                {% for competence in competences %}
+                    <li class="list-group-item d-flex justify-content-between align-items-center">
+                        {{ competence.name }}
+                        <form method="post" action="{{ path('competence_delete', {id: competence.id}) }}">
+                            <button type="submit" class="btn btn-danger btn-sm">Supprimer</button>
+                        </form>
+                    </li>
+                {% else %}
+                    <li class="list-group-item">Aucune compétence ajoutée pour le moment.</li>
+                {% endfor %}
+            </ul>
+
+            <h5 class="mt-4">Ajouter une compétence</h5>
+            <form method="post" action="{{path('add_competence')}}">
+                <div class="input-group mb-3">
+                    <input type="text" name="name" class="form-control" placeholder="Nom de la compétence" required>
+                    <button class="btn btn-primary" type="submit">Ajouter</button>
+                </div>
+            </form>
+        </div>
+    </div>
+
+    <div class="card mb-4">
+        <div class="card-body">
+            <h1 class="card-title py-4">Expériences professionnelles</h1>
+            <div class="row">
+                {% for experience in experiences %}
+                    <div class="col-md-6 mb-4">
+                        <div class="card shadow-sm">
+                            <div class="card-body">
+                                <h5 class="card-title text-primary">{{ experience.titre }}</h5>
+                                <h6 class="card-subtitle mb-2 text-muted">{{ experience.entreprise }}</h6>
+                                <p class="card-text">
+                                    <i class="bi bi-geo-alt-fill"></i> {{ experience.ville }}, {{ experience.pays }}<br>
+                                    <strong>Durée : </strong>{{ experience.debut|date('Y-m-d') }} à {{ experience.fin|date('Y-m-d') }}
+                                </p>
+                                <p class="card-text">{{ experience.description }}</p>
+                                <form method="post" action="{{ path('experience_delete', {id: experience.id}) }}" class="mt-3">
+                                    <button type="submit" class="btn btn-danger btn-sm">
+                                        <i class="bi bi-trash-fill"></i> Supprimer
+                                    </button>
+                                </form>
+                            </div>
+                        </div>
+                    </div>
+                {% else %}
+                    <div class="col-12">
+                        <div class="alert alert-info" role="alert">
+                            Aucune expérience professionnelle ajoutée pour le moment.
+                        </div>
+                    </div>
+                {% endfor %}
+            </div>
+
+            <h5 class="mt-4 mb-4">Ajouter une expérience professionnelle</h5>
+            <form method="post" action="{{path('add_experience')}}">
+                <div class="row mb-3">
+                    <div class="col-md-6">
+                        <input type="text" name="titre" class="form-control" placeholder="Titre du poste" required>
+                    </div>
+                    <div class="col-md-6">
+                        <input type="text" name="entreprise" class="form-control" placeholder="Nom de l'entreprise" required>
+                    </div>
+                </div>
+                <div class="row mb-3">
+                    <div class="col-md-6">
+                        <input type="text" name="pays" class="form-control" placeholder="Pays" required>
+                    </div>
+                    <div class="col-md-6">
+                        <input type="text" name="ville" class="form-control" placeholder="Ville" required>
+                    </div>
+                </div>
+                <div class="row mb-3">
+                    <div class="col-md-6">
+                        <label for="debut" class="form-label">Date de début</label>
+                        <input type="date" id="debut" name="debut" class="form-control" required>
+                    </div>
+                    <div class="col-md-6">
+                        <label for="fin" class="form-label">Date de fin</label>
+                        <input type="date" id="fin" name="fin" class="form-control">
+                    </div>
+                </div>
+                <div class="mb-3">
+                    <textarea name="description" class="form-control" placeholder="Description de l'expérience" rows="3" required></textarea>
+                </div>
+                <button class="btn btn-primary" type="submit">Ajouter</button>
+            </form>
+        </div>
+    </div>
+</div>
+{% endblock %}

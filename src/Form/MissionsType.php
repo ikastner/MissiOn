@@ -8,6 +8,7 @@ use App\Entity\Personel;
 use Symfony\Bridge\Doctrine\Form\Type\EntityType;
 use Symfony\Component\Form\AbstractType;
 use Symfony\Component\Form\Extension\Core\Type\DateTimeType;
+use Symfony\Component\Form\Extension\Core\Type\TextareaType;
 use Symfony\Component\Form\Extension\Core\Type\TextType;
 use Symfony\Component\Form\FormBuilderInterface;
 use Symfony\Component\OptionsResolver\OptionsResolver;
@@ -21,7 +22,7 @@ class MissionsType extends AbstractType
                 'mapped' => false,
                 'label' => 'Titre',
             ])
-            ->add('description', TextType::class, [
+            ->add('description', TextareaType::class, [
                 'mapped' => false,
                 'label' => 'description',
             ])
@@ -51,14 +52,13 @@ class MissionsType extends AbstractType
                 'mapped' => false,
                 'label' => 'Taille du projet',
             ])
-            // ->add('personel', EntityType::class, [
-            //     'class' => Personel::class,
-            //     'choice_label' => 'id',
-            // ])
-            // ->add('freelance', EntityType::class, [
-            //     'class' => Freelance::class,
-            //     'choice_label' => 'id',
-            // ])
+            ->add('competences', TextType::class, [ 
+                'mapped' => false, 
+                'label' => 'Compétences requises',
+                'attr' => [
+                    'placeholder' => 'Ajoutez des compétences, séparées par des virgules',
+                ],
+            ])
         ;
     }
 

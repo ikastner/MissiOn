@@ -58,8 +58,8 @@
                     <option value="BAC+5" {{ app.request.query.get('niveau') == 'BAC+5' ? 'selected' : '' }}>BAC+5</option>
                 </select>
 
-                {# <label for="competences">Compétences requises :</label>
-                <input type="text" id="competences" name="competences" placeholder="Ex : Développement, Marketing" value="{{ app.request.query.get('competences') }}"> #}
+                <label for="competences">Compétences requises :</label>
+                <input type="text" id="competences" name="competences" placeholder="Ex : Développement, Java" value="{{ app.request.query.get('competences') }}">
 
                 <button type="submit" class="btn btn-apply">Appliquer les filtres</button>
             </form>
@@ -97,6 +97,7 @@
                                     <button type="submit" class="btn btn-apply">Postuler</button>
                                 </form>
                                 <a href="" class="btn btn-apply">Contacter l'employeur</a>
+                                <a href="{{ path('mission_detail', {id: mission.id}) }}" class="btn btn-apply">Voir les détails</a>
                             </div>
                         </div>
                     {% endfor %}

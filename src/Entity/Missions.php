@@ -19,7 +19,7 @@ class Missions
     #[ORM\Column(length: 255)]
     private ?string $title = null;
 
-    #[ORM\Column(length: 255)]
+    #[ORM\Column(type: "text")]
     private ?string $description = null;
 
     // #[ORM\Column(length: 255)]
@@ -56,9 +56,16 @@ class Missions
     #[ORM\OneToMany(targetEntity: Candidature::class, mappedBy: 'mission')]
     private Collection $candidatures;
 
+    /**
+     * @var Collection<int, Competence>
+     */
+    #[ORM\ManyToMany(targetEntity: Competence::class, mappedBy: 'mission')]
+    private Collection $competences;
+
     public function __construct()
     {
         $this->candidatures = new ArrayCollection();
+        $this->competences = new ArrayCollection();
     }
 
     public function getId(): ?int
@@ -211,6 +218,33 @@ class Missions
             if ($candidature->getMission() === $this) {
                 $candidature->setMission(null);
             }
+        }
+
+        return $this;
+    }
+
+    /**
+     * @return Collection<int, Competence>
+     */
+    public function getCompetences(): Collection
+    {
+        return $this->competences;
+    }
+
+    public function addCompetence(Competence $competence): static
+    {
+        if (!$this->competences->contains($competence)) {
+            $this->competences->add($competence);
+            $competence->addMission($this);
+        }
+
+        return $this;
+    }
+
+    public function removeCompetence(Competence $competence): static
+    {
+        if ($this->competences->removeElement($competence)) {
+            $competence->removeMission($this);
         }
 
         return $this;

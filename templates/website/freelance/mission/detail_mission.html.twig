@@ -1,0 +1,71 @@
+{% extends 'website/freelance/layout/base.html.twig' %}
+
+{% block title %}Détail de la Mission{% endblock %}
+
+{% block stylesheets %}
+    {{ parent() }}
+    <style>
+        .mission-detail {
+            max-width: 1200px;
+            margin: 0 auto;
+            padding: 20px;
+            background-color: #fff;
+            border-radius: 8px;
+            box-shadow: 0 1px 3px rgba(0,0,0,0.1);
+        }
+        .mission-detail h1 {
+            color: #28a745;
+        }
+        .mission-detail .description {
+            font-size: 1.1em;
+            margin-top: 10px;
+            color: #555;
+        }
+        .mission-detail .info {
+            font-size: 1em;
+            margin-top: 20px;
+            color: #666;
+        }
+        .mission-detail .apply-btn {
+            margin-top: 20px;
+            padding: 10px 20px;
+            background-color: #28a745;
+            color: white;
+            border: none;
+            border-radius: 5px;
+            cursor: pointer;
+        }
+    </style>
+{% endblock %}
+
+{% block body %}
+    <div class="container mission-detail">
+        <h1>{{ mission.title }}</h1>
+
+        <div class="info">
+            <div><strong>TJM:</strong> {{ mission.tjm }} €</div>
+            <div><strong>Niveau:</strong> {{ mission.niveau }}</div>
+            <div><strong>Date de debut:</strong> {{ mission.debut|date('d/m/Y') }}</div>
+            <div><strong>Date de fin:</strong> {{ mission.fin|date('d/m/Y') }}</div>
+            <div><strong>Compétences requises:</strong> 
+            {% if mission.competences is not empty %}
+                <ul>
+                    {% for competence in mission.competences %}
+                        <li>{{ competence.name }}</li>  {# Remplacez 'name' par la propriété appropriée de l'entité Competence #}
+                    {% endfor %}
+                </ul>
+            {% else %}
+                <p>Aucune compétence requise</p>
+            {% endif %}
+        </div>
+        <div><strong>Entreprise:</strong> {{ mission.personel.entreprise.name }} </div>
+        <div class="description">{{ mission.description }}</div>
+
+        <!-- Bouton pour postuler -->
+        <form method="post" action="{{ path('candidature_postuler', {id: mission.id}) }}">
+            <input type="hidden" name="mission_id" value="{{ mission.id }}">
+            <input type="hidden" name="_token" value="{{ csrf_token('postuler_mission') }}">
+            <button type="submit" class="apply-btn">Postuler</button>
+        </form>
+    </div>
+{% endblock %}

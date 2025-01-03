@@ -83,7 +83,7 @@ class WebsiteController extends AbstractController
     // recupere l'utilisateur courrent 
     public function someAction(Security $security): Response
     {
-        $user = $security->getUser(); // Récupère l'utilisateur connecté
+        $user = $this->getUser(); // Récupère l'utilisateur connecté
 
         if ($user) {
             $gestionnaire = $user->getGestionnaire();  // Si l'utilisateur est un gestionnaire
@@ -102,5 +102,13 @@ class WebsiteController extends AbstractController
 
         return $this->redirectToRoute('app_login');
     }
+
+    // #[Route('/freelance/profile', name: 'freelance_profile')]
+    // public function profil() :Response
+    // {
+    //     return $this->render('/website/freelance/profile/profile.html.twig', [
+    //         // 'freelance' => $user->getFreelance(),
+    //     ]);
+    // }
 
 }

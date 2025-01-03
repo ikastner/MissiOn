@@ -55,9 +55,23 @@ class Freelance
     #[ORM\OneToMany(targetEntity: Candidature::class, mappedBy: 'freelance')]
     private Collection $candidatures;
 
+    /**
+     * @var Collection<int, Competence>
+     */
+    #[ORM\ManyToMany(targetEntity: Competence::class, mappedBy: 'freelance')]
+    private Collection $competences;
+
+    /**
+     * @var Collection<int, Experience>
+     */
+    #[ORM\OneToMany(targetEntity: Experience::class, mappedBy: 'freelance')]
+    private Collection $experiences;
+
     public function __construct()
     {
         $this->candidatures = new ArrayCollection();
+        $this->competences = new ArrayCollection();
+        $this->experiences = new ArrayCollection();
     }
 
     public function getId(): ?int
@@ -196,6 +210,63 @@ class Freelance
             // set the owning side to null (unless already changed)
             if ($candidature->getFreelance() === $this) {
                 $candidature->setFreelance(null);
+            }
+        }
+
+        return $this;
+    }
+
+    /**
+     * @return Collection<int, Competence>
+     */
+    public function getCompetences(): Collection
+    {
+        return $this->competences;
+    }
+
+    public function addCompetence(Competence $competence): static
+    {
+        if (!$this->competences->contains($competence)) {
+            $this->competences->add($competence);
+            $competence->addFreelance($this);
+        }
+
+        return $this;
+    }
+
+    public function removeCompetence(Competence $competence): static
+    {
+        if ($this->competences->removeElement($competence)) {
+            $competence->removeFreelance($this);
+        }
+
+        return $this;
+    }
+
+    /**
+     * @return Collection<int, Experience>
+     */
+    public function getExperiences(): Collection
+    {
+        return $this->experiences;
+    }
+
+    public function addExperience(Experience $experience): static
+    {
+        if (!$this->experiences->contains($experience)) {
+            $this->experiences->add($experience);
+            $experience->setFreelance($this);
+        }
+
+        return $this;
+    }
+
+    public function removeExperience(Experience $experience): static
+    {
+        if ($this->experiences->removeElement($experience)) {
+            // set the owning side to null (unless already changed)
+            if ($experience->getFreelance() === $this) {
+                $experience->setFreelance(null);
             }
         }
 
