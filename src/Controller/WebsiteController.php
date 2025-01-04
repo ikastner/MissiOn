@@ -71,7 +71,15 @@ class WebsiteController extends AbstractController
             'pays' => $request->query->get('pays'),
             'ville' => $request->query->get('ville'),
             'search' => $request->query->get('search'),
+            'competences' => $request->query->get('competences')
         ];
+
+        // Si le champ des compétences contient des valeurs, on le transforme en un tableau
+        if (!empty($filters['competences'])) {
+            $filters['competences'] = array_map('trim', explode(',', $filters['competences']));
+        } else {
+            $filters['competences'] = [];
+        }
 
         $freelances = $freelanceRepository->findByFilters($filters);
 
@@ -103,12 +111,15 @@ class WebsiteController extends AbstractController
         return $this->redirectToRoute('app_login');
     }
 
-    // #[Route('/freelance/profile', name: 'freelance_profile')]
-    // public function profil() :Response
-    // {
-    //     return $this->render('/website/freelance/profile/profile.html.twig', [
-    //         // 'freelance' => $user->getFreelance(),
-    //     ]);
-    // }
+    #[Route('/admin/freelance/{id}/profile', name: 'detail_freelance_profile')]
+    public function detail($id, FreelanceRepository $freelanceRepository)
+    {
+        // Récupérer la mission par son ID
+        $freelance = $freelanceRepository->find($id);
+
+        return $this->render('website/admin/find_freelance/profile_freelance.html.twig', [
+            'freelance' => $freelance,
+        ]);
+    }
 
 }

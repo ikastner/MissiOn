@@ -18,7 +18,9 @@ class FreelanceRepository extends ServiceEntityRepository
 
     public function findByFilters(array $filters)
     {
-        $queryb = $this->createQueryBuilder('f');
+        $queryb = $this->createQueryBuilder('f')
+            ->leftJoin('f.competences', 'c') // Jointure avec la table des compétences
+            ->addSelect('c'); // Sélection des compétences pour les conditions
 
         if (!empty($filters['TJM'])) {
             $queryb->andWhere('f.TJM <= :TJM')
@@ -38,6 +40,16 @@ class FreelanceRepository extends ServiceEntityRepository
         if (!empty($filters['search'])) {
             $queryb->andWhere('f.nom LIKE :search OR f.titre LIKE :search')
                ->setParameter('search', '%' . $filters['search'] . '%');
+        }
+
+        // Filtrage par compétences sélectionnées
+        if (!empty($filters['competences'])) {
+            // tableau contenant les compétences sélectionnées
+            $competenceNames = $filters['competences'];
+
+            // filtre des freelances qui possèdent ces compétences
+            $queryb->andWhere('c.name IN (:competences)')
+                   ->setParameter('competences', $competenceNames);
         }
 
         return $queryb->getQuery()->getResult();

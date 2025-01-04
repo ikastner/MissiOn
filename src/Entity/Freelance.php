@@ -34,7 +34,7 @@ class Freelance
     #[ORM\Column(length: 255)]
     private ?string $ville = null;
 
-    #[ORM\Column(length: 255)]
+    #[ORM\Column(type: "text")]
     private ?string $biographie = null;
 
     #[ORM\Column(type: Types::DATE_MUTABLE)]

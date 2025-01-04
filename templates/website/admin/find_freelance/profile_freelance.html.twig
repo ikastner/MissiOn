@@ -1,0 +1,83 @@
+{% extends 'website/admin/layout/base.html.twig' %}
+
+{% block title %}Profil freelance{% endblock %}
+
+{% block stylesheets %}
+    {{ parent() }}
+    <style>
+        .freelance-detail {
+            max-width: 1200px;
+            margin: 0 auto;
+            padding: 20px;
+            background-color: #fff;
+            border-radius: 8px;
+            box-shadow: 0 1px 3px rgba(0,0,0,0.1);
+        }
+        .freelance-detail h2 {
+            color: #28a745;
+        }
+        .freelance-detail .description {
+            font-size: 1.1em;
+            margin-top: 10px;
+            color: #555;
+        }
+        .freelance-detail .info {
+            font-size: 1em;
+            margin-top: 20px;
+            color: #666;
+        }
+        .freelance-detail .apply-btn {
+            margin-top: 20px;
+            padding: 10px 20px;
+            background-color: #28a745;
+            color: white;
+            border: none;
+            border-radius: 5px;
+            cursor: pointer;
+        }
+    </style>
+{% endblock %}
+
+{% block body %}
+    <div class="container freelance-detail">
+        <h2>{{ freelance.nom }}</h2>
+        <h3>{{ freelance.titre }}</h3>
+
+        <div class="info">
+            <div><strong>Email:</strong> {{ freelance.email }}</div>
+            <div><strong>Ville:</strong> {{ freelance.ville }}</div>
+            <div><strong>Pays:</strong> {{ freelance.pays }}</div>
+            <div><strong>Date de naissance:</strong> {{ freelance.dateNaissance|date('d/m/Y') }}</div>
+            <div><strong>Profil: </strong>
+                <p>{{ freelance.biographie }}</p>
+            </div>
+            <div><strong>TJM:</strong> {{ freelance.tjm }} €</div>
+            
+            <div class=' py-2 '><h5>Compétences:</h5> 
+            {% if freelance.competences is not empty %}
+                <ul>
+                    {% for competence in freelance.competences %}
+                        <li>{{ competence.name }}</li> 
+                    {% endfor %}
+                </ul>
+            {% else %}
+                <p>Aucune compétence pour ce profil</p>
+            {% endif %}
+        </div>
+        {% if freelance.experiences is not empty %}
+            <h5>Experiences Professionnelles </h5>
+            {% for experience in freelance.experiences %}
+                <div><strong>Poste:</strong> {{ experience.titre }} </div>
+                <div><strong>Entreprise:</strong> {{ experience.entreprise }} </div>
+                <div><strong>Ville:</strong> {{ experience.ville }} </div>
+                <div><strong>Pays:</strong> {{ experience.pays }} </div>
+                <div><strong>Date de debut:</strong> {{ experience.debut|date('d/m/Y') }} </div>
+                <div><strong>Date de fin:</strong> {{ experience.fin|date('d/m/Y') }} </div>
+                <div class="description"><strong>Description:</strong>
+                <p>{{ experience.description }}</p></div>
+            {% endfor %}
+            {% else %}
+                <p>Aucune expérience pour ce profil</p>
+        {% endif %}
+    </div>
+{% endblock %}

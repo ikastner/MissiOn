@@ -32,7 +32,7 @@ class Experience
     #[ORM\Column(type: Types::DATE_MUTABLE)]
     private ?\DateTimeInterface $fin = null;
 
-    #[ORM\Column(length: 255)]
+    #[ORM\Column(type: "text")]
     private ?string $description = null;
 
     #[ORM\ManyToOne(inversedBy: 'experiences')]

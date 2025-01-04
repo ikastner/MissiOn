@@ -45,6 +45,9 @@
             <label for="ville">Ville :</label>
             <input type="text" id="ville" name="ville" placeholder="Paris" value="{{ app.request.query.get('ville') }}">
 
+            <label for="competences">Compétences requises :</label>
+            <input type="text" id="competences" name="competences" placeholder="Ex : Développement, Java" value="{{ app.request.query.get('competences') }}">
+
             <button type="submit" class="btn btn-invite">Appliquer les filtres</button>
         </form>
     </div>
@@ -75,7 +78,7 @@
                         </div>
                         <div class="freelance-actions">
                             <a href="#" class="btn btn-invite">Inviter à l'emploi</a>
-                            <a href="#" class="btn btn-details">Détails</a>
+                            <a href="{{ path('detail_freelance_profile', {id: freelance.id}) }}" class="btn btn-apply">Voir le profil</a>
                         </div>
                     </div>
                 {% endfor %}

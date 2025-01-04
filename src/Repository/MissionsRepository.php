@@ -35,7 +35,7 @@ class MissionsRepository extends ServiceEntityRepository
     {
         $queryb = $this->createQueryBuilder('m')
             ->leftJoin('m.competences', 'c') // Jointure avec la table des compétences
-            ->addSelect('c'); // Sélectionner les compétences pour les conditions
+            ->addSelect('c'); // Sélection des compétences pour les conditions
 
         if (!empty($filters['tjm'])) {
             $queryb->andWhere('m.tjm <= :tjm')
@@ -53,15 +53,15 @@ class MissionsRepository extends ServiceEntityRepository
         }
 
         // Filtrage par compétences sélectionnées
-    if (!empty($filters['competences'])) {
-        // Supposez que 'competences' est un tableau contenant les compétences sélectionnées
-        $competenceNames = $filters['competences'];
-
-        // Nous allons ajouter une condition pour filtrer les missions qui possèdent ces compétences
-        $queryb->andWhere('c.name IN (:competences)')  // Nous utilisons "IN" pour vérifier les compétences
-               ->setParameter('competences', $competenceNames);  // Liste des compétences sélectionnées
-    }
-
-        return $queryb->getQuery()->getResult();
-    }
+        if (!empty($filters['competences'])) {
+            //tableau contenant les compétences sélectionnées
+            $competenceNames = $filters['competences'];
+        
+            //filtre des missions qui possèdent ces compétences
+            $queryb->andWhere('c.name IN (:competences)')  
+                   ->setParameter('competences', $competenceNames);
+        }
+    
+            return $queryb->getQuery()->getResult();
+        }
 }
