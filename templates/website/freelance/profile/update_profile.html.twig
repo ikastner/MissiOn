@@ -1,0 +1,54 @@
+{% extends 'website/freelance/layout/base.html.twig' %}
+
+{% block title %}Profil Freelance{% endblock %}
+
+{% block body %}
+
+<div class="card">
+    <div class="card-header text-center">
+        <h2>Modifier mes informations personnelles</h2>
+    </div>
+    <div class="card-body">
+        <form action="{{ path('register_update_profile') }}" method="POST">
+            <div class="row">
+                <div class="col-md-6 mb-3">
+                    <label for="nom" class="form-label text-primary">Nom</label>
+                    <input type="text" class="form-control" id="nom" name="nom" placeholder="Votre nom" value="{{ app.user.freelance.nom }}">
+                </div>
+                <div class="col-md-6 mb-3">
+                    <label for="email" class="form-label text-primary">Email</label>
+                    <input type="email" class="form-control" id="email" name="email" placeholder="Votre email" value="{{ app.user.email }}">
+                </div>
+                <div class="col-md-6 mb-3">
+                    <label for="titre" class="form-label text-primary">Titre</label>
+                    <input type="text" class="form-control" id="titre" name="titre" placeholder="Votre titre professionnel" value="{{ app.user.freelance.titre }}">
+                </div>
+                <div class="col-md-6 mb-3">
+                    <label for="tjm" class="form-label text-primary">TJM (€)</label>
+                    <input type="number" class="form-control" id="tjm" name="tjm" placeholder="Votre TJM" value="{{ app.user.freelance.TJM }}">
+                </div>
+                <div class="col-md-6 mb-3">
+                    <label for="pays" class="form-label text-primary">Pays</label>
+                    <input type="text" class="form-control" id="pays" name="pays" placeholder="Votre pays" value="{{ app.user.freelance.pays }}">
+                </div>
+                <div class="col-md-6 mb-3">
+                    <label for="ville" class="form-label text-primary">Ville</label>
+                    <input type="text" class="form-control" id="ville" name="ville" placeholder="Votre ville" value="{{ app.user.freelance.ville }}">
+                </div>
+                <div class="col-12 mb-3">
+                    <label for="biographie" class="form-label text-primary">Biographie</label>
+                    <textarea class="form-control" id="biographie" name="biographie" placeholder="Parlez un peu de vous..." rows="4">{{ app.user.freelance.biographie }}</textarea>
+                </div>
+                <div class="col-md-6 mb-3">
+                    <label for="dateNaissance" class="form-label text-primary">Date de naissance</label>
+                    <input type="date" class="form-control" id="dateNaissance" name="dateNaissance" value="{{ app.user.freelance.dateNaissance|date('Y-m-d') }}">
+                </div>
+            </div>
+            <div class="d-flex justify-content-end mt-4">
+                <button type="submit" class="btn btn-primary">Enregistrer</button>
+            </div>
+        </form>
+    </div>
+</div>
+
+{% endblock %}

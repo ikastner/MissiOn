@@ -16,7 +16,7 @@
     <div class="card mb-4">
         <div class="card-body">
             <h2 class="card-title">Informations personnelles</h2>
-            <ul class="list-group">
+            <ul class="list-group pb-2">
                 <li class="list-group-item"><strong>Nom :</strong> {{ app.user.freelance.nom }}</li>
                 <li class="list-group-item"><strong>Email :</strong> {{ app.user.email }}</li>
                 <li class="list-group-item"><strong>Titre :</strong> {{ app.user.freelance.titre }}</li>
@@ -26,6 +26,7 @@
                 <li class="list-group-item"><strong>Biographie :</strong> {{ app.user.freelance.biographie }}</li>
                 <li class="list-group-item"><strong>Date de naissance :</strong> {{ app.user.freelance.dateNaissance|date('d/m/Y') }}</li>
             </ul>
+            <a href="{{ path('update_profile', {id: app.user.id}) }}" class="btn btn-primary">Modifier mes informations</a>
         </div>
     </div>
 

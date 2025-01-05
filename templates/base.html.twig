@@ -7,215 +7,35 @@
     <link rel="icon" href="data:image/svg+xml,<svg xmlns=%22http://www.w3.org/2000/svg%22 viewBox=%220 0 128 128%22><text y=%221.2em%22 font-size=%2296%22>⚫️</text><text y=%221.3em%22 x=%220.2em%22 font-size=%2276%22 fill=%22%23fff%22>sf</text></svg>">
     <link href="https://cdn.jsdelivr.net/npm/bootstrap@5.3.3/dist/css/bootstrap.min.css" rel="stylesheet">
     <link href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.0.0-beta3/css/all.min.css" rel="stylesheet">
+
     {% block stylesheets %}
-        <style>
-            .navbar {
-                background-color: white;
-                border-bottom: 1px solid #f0f0f0;
-                padding-left: 5%;
-                padding-right: 5%;
-            }
-            @media (min-width: 992px) {
-                .dropdown-menu {
-                    width: 1000px;
-                    border: 1px solid #ddd;
-                }
-                .dropdown:hover .dropdown-menu {
-                    display: flex;
-                }
-            }
-            .dropdown-column {
-                padding: 20px;
-                min-width: 200px;
-            }
-            .highlight-link {
-                font-weight: bold;
-                color: #28a745;
-            }
-            .highlight-link:hover {
-                text-decoration: underline;
-            }
-            .menu-title {
-                color: #28a745;
-                font-weight: bold;
-                margin-bottom: 15px;
-            }
-            @media (max-width: 991.98px) {
-                .navbar-nav .dropdown-menu {
-                    position: static;
-                    float: none;
-                    width: auto;
-                    margin-top: 0;
-                    background-color: transparent;
-                    border: 0;
-                    box-shadow: none;
-                }
-            }
-            .btn-login, .btn-search {
-                background-color: #28a745;
-                color: white;
-                font-weight: bold;
-            }
-            .btn-login:hover, .btn-search:hover {
-                background-color: #218838;
-                color: white;
-            }
-            .navbar-brand {
-                font-weight: bold;
-            }
-        </style>
+    {# {{ parent() }} #}
+    <link rel="stylesheet" href="{{ asset('css/media.css') }}">
     {% endblock %}
+        
 
     {% block javascripts %}{% endblock %}
 </head>
 <body>
-<nav class="navbar navbar-expand-lg navbar-light">
+
+<nav class="navbar navbar-expand-lg navbar-light bg-light">
     <div class="container-fluid">
+        <!-- Logo MissiOn à gauche -->
         <a class="navbar-brand" href="/">MissiOn</a>
-        <button class="navbar-toggler" type="button" data-bs-toggle="collapse" data-bs-target="#navbarContent" aria-controls="navbarContent" aria-expanded="false" aria-label="Toggle navigation">
-            <span class="navbar-toggler-icon"></span>
-        </button>
 
-        <div class="collapse navbar-collapse" id="navbarContent">
-            <ul class="navbar-nav me-auto mb-2 mb-lg-0">
-                <li class="nav-item dropdown">
-                    <a class="nav-link dropdown-toggle" href="#" id="navbarDropdownTalents" role="button" data-bs-toggle="dropdown" aria-expanded="false">
-                        Trouver des talents
-                    </a>
-                    <div class="dropdown-menu p-3" aria-labelledby="navbarDropdownTalents">
-                        <div class="row">
-                            <div class="col-md-4 dropdown-column">
-                                <div class="mb-3">
-                                    <a href="/parcourir-freelances" class="highlight-link">Rechercher des talents</a>
-                                    <br><a href="#">Développeurs</a>
-                                </div>
-                                <div class="mb-3">
-                                    <a href="#" class="highlight-link">Designers</a>
-                                    <br><a href="#">Graphistes</a>
-                                </div>
-                            </div>
-                            <div class="col-md-4 dropdown-column">
-                                <div class="mb-3">
-                                    <a href="#" class="highlight-link">Marketing</a>
-                                    <br><a href="#">Spécialistes SEO</a>
-                                </div>
-                                <div class="mb-3">
-                                    <a href="#" class="highlight-link">Rédacteurs</a>
-                                    <br><a href="#">Traducteurs</a>
-                                </div>
-                            </div>
-                            <div class="col-md-4 dropdown-column">
-                                <div class="mb-3">
-                                    <a href="#" class="highlight-link">Support client</a>
-                                    <br><a href="#">Agents de support</a>
-                                </div>
-                                <div class="mb-3">
-                                    <a href="#" class="highlight-link">Gestion de projet</a>
-                                    <br><a href="#">Chefs de projet</a>
-                                </div>
-                            </div>
-                        </div>
-                    </div>
-                </li>
-                <li class="nav-item dropdown">
-                    <a class="nav-link dropdown-toggle" href="#" id="navbarDropdownTravail" role="button" data-bs-toggle="dropdown" aria-expanded="false">
-                        Trouver du travail
-                    </a>
-                    <div class="dropdown-menu p-3" aria-labelledby="navbarDropdownTravail">
-                        <div class="row">
-                            <div class="col-md-4 dropdown-column">
-                                <div class="mb-3">
-                                    <a href="#" class="highlight-link">Rechercher des emplois</a>
-                                    <br><a href="#">Emplois à temps plein</a>
-                                </div>
-                                <div class="mb-3">
-                                    <a href="#" class="highlight-link">Proposer vos services</a>
-                                    <br><a href="#">Freelance</a>
-                                </div>
-                            </div>
-                            <div class="col-md-8 dropdown-column">
-                                <h6 class="menu-title">Catégories d'emplois</h6>
-                                <ul class="list-unstyled">
-                                    <li><a href="#">Développement web</a></li>
-                                    <li><a href="#">Design graphique</a></li>
-                                    <li><a href="#">Rédaction et traduction</a></li>
-                                    <li><a href="#">Marketing digital</a></li>
-                                    <li><a href="#">Support client</a></li>
-                                    <li><a href="#">Gestion de projet</a></li>
-                                </ul>
-                            </div>
-                        </div>
-                    </div>
-                </li>
-                <li class="nav-item dropdown">
-                    <a class="nav-link dropdown-toggle" href="#" id="navbarDropdownWhy" role="button" data-bs-toggle="dropdown" aria-expanded="false">
-                        Pourquoi MissiOn
-                    </a>
-                    <div class="dropdown-menu p-3" aria-labelledby="navbarDropdownWhy">
-                        <div class="row">
-                            <div class="col-md-4 dropdown-column">
-                                <div class="mb-3">
-                                    <a href="#" class="highlight-link">Notre mission</a>
-                                    <br><a href="#">Valeurs de l'entreprise</a>
-                                </div>
-                                <div class="mb-3">
-                                    <a href="#" class="highlight-link">Notre vision</a>
-                                    <br><a href="#">Objectifs à long terme</a>
-                                </div>
-                            </div>
-                            <div class="col-md-4 dropdown-column">
-                                <div class="mb-3">
-                                    <a href="#" class="highlight-link">Nos services</a>
-                                    <br><a href="#">Solutions innovantes</a>
-                                </div>
-                                <div class="mb-3">
-                                    <a href="#" class="highlight-link">Témoignages</a>
-                                    <br><a href="#">Études de cas</a>
-                                </div>
-                            </div>
-                            <div class="col-md-4 dropdown-column">
-                                <div class="mb-3">
-                                    <a href="#" class="highlight-link">Notre équipe</a>
-                                    <br><a href="#">Profils des membres</a>
-                                </div>
-                                <div class="mb-3">
-                                    <a href="#" class="highlight-link">Nos partenaires</a>
-                                    <br><a href="#">Collaborations</a>
-                                </div>
-                            </div>
-                        </div>
-                    </div>
-                </li>
-            </ul>
-
-            <form class="d-flex me-2">
-                <div class="input-group">
-        <span class="input-group-text bg-white border-end-0">
-            <i class="fas fa-search text-muted"></i>
-        </span>
-                    <input class="form-control border-start-0" type="search" placeholder="Search" aria-label="Search">
-                    <select class="form-select" style="max-width: 120px;">
-                        <option value="talent">Talent</option>
-                        <option value="projets">Projets</option>
-                        <option value="emplois">Emplois</option>
-                    </select>
-                    <button class="btn btn-search" type="submit">Rechercher</button>
-                </div>
-            </form>
-
-            <ul class="navbar-nav">
-                <li class="nav-item">
-                    <a class="nav-link" href="/choice/register">S'inscrire</a>
-                </li>
-                <li class="nav-item">
-                    <a class="btn btn-login" href="/login">Se connecter</a>
-                </li>
-            </ul>
-        </div>
+        <!-- Inscription et connexion à droite -->
+        <ul class="navbar-nav ms-auto">
+            <li class="nav-item">
+                <a class="nav-link" href="/choice/register">S'inscrire</a>
+            </li>
+            <li class="nav-item">
+                <a class="btn btn-login" href="/login">Se connecter</a>
+            </li>
+        </ul>
     </div>
 </nav>
 
-<div class="container my-4">
+<div class="container-fluid">
     {% block body %}{% endblock %}
 </div>
 

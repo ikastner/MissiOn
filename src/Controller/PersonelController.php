@@ -20,10 +20,10 @@ class PersonelController extends AbstractController
 
         $entreprise = $gestionnaire->getEntreprise();
 
-     // Récupérer uniquement les missions du personnel connecté
-     $personels = $entityManager->getRepository(Personel::class)->findBy([
-         'entreprise' => $entreprise,
-     ]);
+        // Récupérer uniquement les missions du personnel connecté
+        $personels = $entityManager->getRepository(Personel::class)->findBy([
+            'entreprise' => $entreprise,
+        ]);
         // $personels = $entityManager->getRepository(Personel::class)->findAll();
 
         return $this->render('website/admin/personnel/index.html.twig', [

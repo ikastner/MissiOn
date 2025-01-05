@@ -32,11 +32,6 @@
                     <a href="{{ path('candidature_validate', {id: candidature.id}) }}" class="d-inline">
                         <button class="btn btn-success">Valider</button>
                     </a>
-                    {# <form method="post" action="{{ path('personel_delete', {id: personel.id}) }}" onsubmit="return confirm('Voulez-vous vraiment supprimer ce personnel ?');" class="d-inline">
-                        <input type="hidden" name="_method" value="DELETE">
-                        <input type="hidden" name="_token" value="{{ csrf_token('delete' ~ personel.id) }}">
-                        <button type="submit" class="btn btn-danger">Supprimer</button>
-                    </form> #}
                 </td>
             </tr>
             {% else %}

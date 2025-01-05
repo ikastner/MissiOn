@@ -56,7 +56,7 @@ class UserAuthAuthenticator extends AbstractLoginFormAuthenticator
         if ($user instanceof User) {
             switch ($user->getType()) {
                 case 'freelance':
-                    return new RedirectResponse($this->urlGenerator->generate('app_freelance'));
+                    return new RedirectResponse($this->urlGenerator->generate('freelance_profile'));
                 case 'gestionnaire':
                     return new RedirectResponse($this->urlGenerator->generate('app_admin'));
                 case 'personel':

@@ -30,23 +30,11 @@ class CandidatureController extends AbstractController
         ->setParameter('accepte', 0)
         ->getQuery()
         ->getResult();
-        // $candidatures = $entityManager->getRepository(Candidature::class)->findBy([
-        //     'accepte' => 0
-        // ]);
 
         return $this->render('website/admin/candidature/candidature.html.twig', [
             'candidatures' => $candidatures,
         ]);
     }
-
-    // #[Route('/mission-detail', name: 'mission_detail')]
-    // public function detail_mission(EntityManagerInterface $entityManager): Response
-    // {
-    //     $missions = $entityManager->getRepository(Missions::class)->findAll();
-    //     return $this->render('website/mission_detail.html.twig', [
-    //         'missions'=>$missions,
-    //     ]);
-    // }
 
     public function postuler(Request $request, EntityManagerInterface $entityManager, CandidatureRepository $candidatureRepository): Response
     {

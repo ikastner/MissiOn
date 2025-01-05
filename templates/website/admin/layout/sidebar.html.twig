@@ -1,78 +1,78 @@
 <aside id="sidebar" >
-            <div class="d-flex">
-                <button class="toggle-btn" type="button">
-                    <i class="lni lni-grid-alt"></i>
-                </button>
-                <div class="sidebar-logo">
-                    <a href="#">MissiOn</a>
-                </div>
-            </div>
-            <ul class="sidebar-nav">
-                <li class="sidebar-item">
-                    <a href="{{path('app_admin')}}" class="sidebar-link">
-                        <i class="lni lni-home"></i>
-                        <span>Accueil</span>
-                    </a>
-                </li>
-                {% if app.user and is_granted('ROLE_GESTIONNAIRE') %}
+    <div class="d-flex">
+        <button class="toggle-btn" type="button">
+            <i class="lni lni-grid-alt"></i>
+        </button>
+        <div class="sidebar-logo">
+            <a href="#">MissiOn</a>
+        </div>
+    </div>
+    <ul class="sidebar-nav">
+        <li class="sidebar-item">
+            <a href="{{path('app_admin')}}" class="sidebar-link">
+                <i class="lni lni-home"></i>
+                <span>Accueil</span>
+            </a>
+        </li>
+        {% if app.user and is_granted('ROLE_GESTIONNAIRE') %}
+            <li class="sidebar-item">
+                <a href="#" class="sidebar-link collapsed has-dropdown" data-bs-toggle="collapse"
+                    data-bs-target="#auth" aria-expanded="false" aria-controls="auth">
+                    <i class="lni lni-cog"></i>
+                    <span>Gérer les Personnels</span>
+                </a>
+                <ul id="auth" class="sidebar-dropdown list-unstyled collapse" data-bs-parent="#sidebar">
                     <li class="sidebar-item">
-                        <a href="#" class="sidebar-link collapsed has-dropdown" data-bs-toggle="collapse"
-                            data-bs-target="#auth" aria-expanded="false" aria-controls="auth">
-                            <i class="lni lni-cog"></i>
-                            <span>Gérer les Personnels</span>
-                        </a>
-                        <ul id="auth" class="sidebar-dropdown list-unstyled collapse" data-bs-parent="#sidebar">
-                            <li class="sidebar-item">
-                                <a href="{{ path('registration_personel')}}" class="sidebar-link">Ajouter des personnels</a>
-                            </li>
-                            <li class="sidebar-item">
-                                <a href="{{ path('personels_list') }}" class="sidebar-link">Liste des personnels</a>
-                            </li>
-                        </ul>
+                        <a href="{{ path('registration_personel')}}" class="sidebar-link">Ajouter des personnels</a>
                     </li>
-                {% endif %}
-                <li class="sidebar-item">
-                    <a href="#" class="sidebar-link collapsed has-dropdown" data-bs-toggle="collapse"
-                        data-bs-target="#auth" aria-expanded="false" aria-controls="auth">
-                        <i class="lni lni-cog"></i>
-                        <span>Missions</span>
-                    </a>
-                    <ul id="auth" class="sidebar-dropdown list-unstyled collapse" data-bs-parent="#sidebar">
-                        {% if app.user and is_granted('ROLE_PERSONNEL') %}
-                        <li class="sidebar-item">
-                            <a href="{{ path('create_missions') }}" class="sidebar-link">Ajouter des missions</a>
-                        </li>
-                        {% endif %}
-                        <li class="sidebar-item">
-                            <a href="{{ path('missions_list') }}" class="sidebar-link">Tous les missions</a>
-                        </li>
-                    </ul>
-                </li>
+                    <li class="sidebar-item">
+                        <a href="{{ path('personels_list') }}" class="sidebar-link">Liste des personnels</a>
+                    </li>
+                </ul>
+            </li>
+        {% endif %}
+        <li class="sidebar-item">
+            <a href="#" class="sidebar-link collapsed has-dropdown" data-bs-toggle="collapse"
+                data-bs-target="#auth" aria-expanded="false" aria-controls="auth">
+                <i class="lni lni-cog"></i>
+                <span>Missions</span>
+            </a>
+            <ul id="auth" class="sidebar-dropdown list-unstyled collapse" data-bs-parent="#sidebar">
                 {% if app.user and is_granted('ROLE_PERSONNEL') %}
                 <li class="sidebar-item">
-                    <a href="{{path('app_candidature')}}" class="sidebar-link">
-                        <i class="lni lni-checkmark-circle"></i>
-                        <span>Candidature</span>
-                    </a>
+                    <a href="{{ path('create_missions') }}" class="sidebar-link">Ajouter des missions</a>
                 </li>
                 {% endif %}
                 <li class="sidebar-item">
-                    <a href="#" class="sidebar-link">
-                        <i class="lni lni-popup"></i>
-                        <span>Notification</span>
-                    </a>
-                </li>
-                <li class="sidebar-item">
-                    <a href="{{path('app_find_freelance')}}" class="sidebar-link">
-                        <i class="lni lni-search"></i>
-                        <span>Trouver des freelances</span>
-                    </a>
+                    <a href="{{ path('missions_list') }}" class="sidebar-link">Tous les missions</a>
                 </li>
             </ul>
-            <div class="sidebar-footer">
-                <a href="{{ path('app_logout') }}" class="sidebar-link">
-                    <i class="lni lni-exit"></i>
-                    <span>Déconnexion</span>
-                </a>
-            </div>
-        </aside>
+        </li>
+        {% if app.user and is_granted('ROLE_PERSONNEL') %}
+        <li class="sidebar-item">
+            <a href="{{path('app_candidature')}}" class="sidebar-link">
+                <i class="lni lni-checkmark-circle"></i>
+                <span>Candidature</span>
+            </a>
+        </li>
+        {% endif %}
+        <li class="sidebar-item">
+            <a href="#" class="sidebar-link">
+                <i class="lni lni-popup"></i>
+                <span>Notification</span>
+            </a>
+        </li>
+        <li class="sidebar-item">
+            <a href="{{path('app_find_freelance')}}" class="sidebar-link">
+                <i class="lni lni-search"></i>
+                <span>Trouver des freelances</span>
+            </a>
+        </li>
+    </ul>
+    <div class="sidebar-footer">
+        <a href="{{ path('app_logout') }}" class="sidebar-link">
+            <i class="lni lni-exit"></i>
+            <span>Déconnexion</span>
+        </a>
+    </div>
+</aside>

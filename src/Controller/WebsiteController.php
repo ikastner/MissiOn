@@ -13,21 +13,6 @@ use Symfony\Component\Routing\Attribute\Route;
 
 class WebsiteController extends AbstractController
 {
-    // #[Route('/website', name: 'app_website')]
-    // public function index(): Response
-    // {
-    //     return $this->render('website/po.html.twig', [
-    //         'controller_name' => 'WebsiteController',
-    //     ]);
-    // }
-
-    // #[Route('/gestionnaire', name: 'app_gestionnaire_view')]
-    // public function gestionnaire_view():Response 
-    // {
-    //     return $this->render('website/admin/index.html.twig', [
-    //         'controller_name' => 'WebsiteController',
-    //     ]);
-    // }
 
     #[Route('/', name: 'app_home')]
     public function freelance_view():Response
@@ -51,14 +36,6 @@ class WebsiteController extends AbstractController
     public function admin(): Response
     {
         return $this->render('website/admin/index.html.twig', [
-            'controller_name' => 'WebsiteController',
-        ]);
-    }
-
-    #[Route('/freelance', name: 'app_freelance')]
-    public function freelance(): Response
-    {
-        return $this->render('website/freelance/index.html.twig', [
             'controller_name' => 'WebsiteController',
         ]);
     }

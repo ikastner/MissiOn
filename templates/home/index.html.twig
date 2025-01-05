@@ -4,7 +4,6 @@
 
 
 {% block body %}
-    <!-- Hero Section -->
     <section class="hero-section text-white d-flex flex-column justify-content-center align-items-center">
         <h1 class="display-4 fw-bold">Trouvez les meilleurs freelances en France</h1>
         <p class="lead mb-4">Connectez-vous avec des experts en développement, design, marketing, et bien plus encore.</p>
@@ -15,93 +14,60 @@
         </form>
     </section>
 
-    <!-- Categories Section -->
     <section class="container my-5">
-        <h2 class="text-center mb-4">Catégories populaires</h2>
-        <div class="row">
-            {% set categories = [
-                {'name': 'Développement', 'image': 'category-dev.jpg'},
-                {'name': 'Design', 'image': 'category-design.jpg'},
-                {'name': 'Marketing', 'image': 'category-marketing.jpg'},
-                {'name': 'Rédaction', 'image': 'category-writing.jpg'}
-            ] %}
-
-            {% for category in categories %}
-                <div class="col-md-3 mb-4">
-                    <div class="card category-card">
-                        <img src="{{ asset('images/' ~ category.image) }}" alt="{{ category.name }}">
-                        <div class="card-body text-center">
-                            <h5 class="card-title">{{ category.name }}</h5>
-                        </div>
-                    </div>
-                </div>
-            {% endfor %}
-        </div>
-    </section>
-
-    <!-- Benefits Section -->
-    <section class="container my-5">
-        <h2 class="text-center mb-4">Pourquoi choisir Malt?</h2>
+        <h2 class="text-center mb-4">Pourquoi choisir MissiOn?</h2>
         <div class="row text-center">
-            {% set benefits = [
-                {'title': 'Sécurité', 'description': 'Garantissez vos paiements et bénéficiez d\'un support dédié.', 'icon': 'icon-security.png'},
-                {'title': 'Expertise', 'description': 'Accédez à des experts dans divers domaines professionnels.', 'icon': 'icon-expertise.png'},
-                {'title': 'Flexibilité', 'description': 'Engagez des freelances selon vos besoins et votre budget.', 'icon': 'icon-flexibility.png'}
-            ] %}
-
-            {% for benefit in benefits %}
-                <div class="col-md-4">
-                    <div class="icon-box">
-                        <img src="{{ asset('images/' ~ benefit.icon) }}" alt="{{ benefit.title }}">
-                        <h5 class="mt-3">{{ benefit.title }}</h5>
-                        <p>{{ benefit.description }}</p>
-                    </div>
-                </div>
-            {% endfor %}
-        </div>
-    </section>
-
-    <!-- Testimonials Section -->
-    <section class="testimonial">
-        <div class="container">
-            <h2 class="text-center mb-4">Ils nous font confiance</h2>
-            <div class="row justify-content-center">
-                <div class="col-md-8">
-                    <blockquote class="blockquote">
-                        <p class="mb-4">“Grâce à Malt, nous avons trouvé des experts de qualité pour développer nos projets rapidement et efficacement.”</p>
-                        <footer class="blockquote-footer">Client de Malt, <cite title="Source Title">Entreprise X</cite></footer>
-                    </blockquote>
+            <div class="col-md-4">
+                <div class="icon-box">
+                    <img src="../img/icon-security.png" alt="Sécurité" class="icon-img">
+                    <h5 class="mt-3">Sécurité</h5>
+                    <p>Garantissez vos paiements et bénéficiez d'un support dédié.</p>
                 </div>
             </div>
-            <div class="row mt-4 text-center">
-                {% set logos = ['client1.png', 'client2.png', 'client3.png', 'client4.png', 'client5.png'] %}
-                {% for logo in logos %}
-                    <div class="col-md-2">
-                        <img src="{{ asset('images/' ~ logo) }}" alt="Client Logo" class="img-fluid">
-                    </div>
-                {% endfor %}
+            <div class="col-md-4">
+                <div class="icon-box">
+                    <img src="../img/icon-expertise.jpg" alt="Expertise" class="icon-img">
+                    <h5 class="mt-3">Expertise</h5>
+                    <p>Accédez à des experts dans divers domaines professionnels.</p>
+                </div>
+            </div>
+            <div class="col-md-4">
+                <div class="icon-box">
+                    <img src="../img/icon-flexibility.webp" alt="Flexibilité" class="icon-img">
+                    <h5 class="mt-3">Flexibilité</h5>
+                    <p>Engagez des freelances selon vos besoins et votre budget.</p>
+                </div>
             </div>
         </div>
     </section>
 
-    <!-- How It Works Section -->
     <section class="container my-5">
         <h2 class="text-center mb-4">Comment ça marche</h2>
         <div class="row text-center">
-            {% set steps = [
-                {'title': '1. Trouvez un freelance', 'description': 'Parcourez les profils et trouvez un expert pour votre projet.'},
-                {'title': '2. Engagez et collaborez', 'description': 'Discutez des détails et lancez votre projet en toute sécurité.'},
-                {'title': '3. Payez en toute sécurité', 'description': 'Une fois le projet terminé, effectuez un paiement sécurisé.'}
-            ] %}
-
-            {% for step in steps %}
-                <div class="col-md-4">
-                    <h5>{{ step.title }}</h5>
-                    <p>{{ step.description }}</p>
+            <div class="col-md-4">
+                <div class="icon-box">
+                    <img src="../img/icon-find.jpeg" alt="Find" class="icon-img">
+                    <h5 class="mt-3">1. Trouvez un freelance</h5>
+                    <p>Parcourez les profils et trouvez un expert pour votre projet.</p>
                 </div>
-            {% endfor %}
+            </div>
+            <div class="col-md-4">
+                <div class="icon-box">
+                    <img src="../img/icon-colaboration.png" alt="Colaboration" class="icon-img">
+                    <h5 class="mt-3">2. Engagez et collaborez</h5>
+                    <p>Discutez des détails et lancez votre projet en toute sécurité.</p>
+                </div>
+            </div>
+            <div class="col-md-4">
+                <div class="icon-box">
+                    <img src="../img/icon-payment.png" alt="Payment" class="icon-img">
+                    <h5 class="mt-3">3. Payez en toute sécurité</h5>
+                    <p>Une fois le projet terminé, effectuez un paiement sécurisé.</p>
+                </div>
+            </div>
         </div>
     </section>
+
 {% endblock %}
 
 {% block javascripts %}
