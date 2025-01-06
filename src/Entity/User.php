@@ -23,7 +23,7 @@ class User implements UserInterface, PasswordAuthenticatedUserInterface
     private ?string $email = null;
 
     #[ORM\Column(type: 'string', length: 180)]
-    private ?string $type = null; 
+    private ?string $type = null;
 
     /**
      * @var list<string> The user roles

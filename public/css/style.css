@@ -240,3 +240,50 @@ a.sidebar-link:hover {
 .dashboard-row {
     margin-top: 30px;
 }
+
+
+/* Conversation styles */
+.conversation-container .conversation {
+    display: flex;
+    flex-direction: column;
+}
+
+.conversation-container .message {
+    max-width: 70%;
+    padding: 10px;
+    margin: 5px 0;
+    border-radius: 10px;
+}
+
+.conversation-container .message.sent {
+    align-self: flex-end;
+    background-color: #dcf8c6 !important;
+}
+
+.conversation-container .message.received {
+    align-self: flex-start;
+    background-color: #ffffff !important;
+    border: 1px solid #ddd;
+}
+
+/* Additional styles for conversation list items */
+.conversation-item {
+    border: 1px solid #ddd;
+    border-radius: 10px;
+    padding: 15px;
+    margin-bottom: 10px;
+    background-color: #f9f9f9;
+}
+
+.conversation-item h5 {
+    margin-bottom: 5px;
+}
+
+.conversation-item small {
+    display: block;
+    margin-top: 5px;
+}
+
+.conversation-item .badge {
+    margin-left: 10px;
+}

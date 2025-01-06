@@ -193,6 +193,10 @@ class Missions
         return $this;
     }
 
+    public function getUserId(): ?int
+    {
+        return $this->personel?->getUser()->getId();
+    }
     /**
      * @return Collection<int, Candidature>
      */

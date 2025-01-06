@@ -6,7 +6,9 @@ use App\Entity\Competence;
 use App\Entity\Missions;
 use App\Entity\Personel;
 use App\Form\MissionsType;
+use App\Repository\MessagesRepository;
 use App\Repository\MissionsRepository;
+use Doctrine\DBAL\Exception;
 use Doctrine\ORM\EntityManagerInterface;
 use Symfony\Bundle\FrameworkBundle\Controller\AbstractController;
 use Symfony\Component\HttpFoundation\Request;
@@ -16,7 +18,7 @@ use Symfony\Component\Routing\Attribute\Route;
 class MissionController extends AbstractController
 {
     #[Route('/admin/mission/create', name: 'create_missions')]
-    public function create_mission(Request $request, EntityManagerInterface $entityManager ): Response
+    public function create_mission(Request $request, EntityManagerInterface $entityManager): Response
     {
         $mission = new Missions();
 
@@ -51,8 +53,8 @@ class MissionController extends AbstractController
             foreach ($competenceNames as $name) {
                 $competence = new Competence();
                 $competence->setName($name);
-    
-                $competence->addMission($mission); 
+
+                $competence->addMission($mission);
                 $entityManager->persist($competence);
             }
 
@@ -61,13 +63,12 @@ class MissionController extends AbstractController
 
             $this->addFlash('success', 'Mission créée avec succès.');
 
-            return $this->redirectToRoute('missions_list'); 
+            return $this->redirectToRoute('missions_list');
         }
 
         return $this->render('website/admin/mission/create.html.twig', [
             'form' => $form->createView(),
         ]);
-        
     }
 
     #[Route('/admin/mission', name: 'missions_list')]
@@ -94,9 +95,9 @@ class MissionController extends AbstractController
                 ->setParameter('personels', $personels)
                 ->getQuery()
                 ->getResult();
-            } else {
-                // Si l'utilisateur est un personnel
-                $personel = $user->getPersonel();
+        } else {
+            // Si l'utilisateur est un personnel
+            $personel = $user->getPersonel();
 
             // Récupérer uniquement les missions du personnel connecté
             $missions = $entityManager->getRepository(Missions::class)->findBy([
@@ -108,42 +109,77 @@ class MissionController extends AbstractController
         ]);
     }
 
+    /**
+     * @throws Exception
+     */
     #[Route('/freelance/mission', name: 'missions_list_freelance')]
-    public function list_missions_freelance(EntityManagerInterface $entityManager): Response
+    public function list_missions_freelance(EntityManagerInterface $entityManager, MessagesRepository $messagesRepo): Response
     {
+        $user = $this->getUser();
         $missions = $entityManager->getRepository(Missions::class)->findAll();
+        $existingConversation = false;
+
+        foreach ($missions as $mission) {
+            $personel = $mission->getPersonel();
+            $userId = $personel ? $personel->getUser()->getId() : null;
+            $mission->userId = $userId; // Ajouter la clé userId à l'objet mission
+
+            if ($user && $userId) {
+                $existingConversation = $messagesRepo->getConversationIdBetweenUsers($user->getId(), $userId);
+                if ($existingConversation) {
+                    break;
+                }
+            }
+        }
 
         return $this->render('website/freelance/mission/missions.html.twig', [
-            'missions'=>$missions,
+            'missions' => $missions,
+            'existingConversation' => $existingConversation,
         ]);
     }
 
     #[Route('/missions/filter', name: 'missions_filter')]
-    public function filterMissions(Request $request, MissionsRepository $missionRepository): Response
-    {
-        $filters = [
-            'tjm' => $request->query->get('tjm'),
-            'niveau' => $request->query->get('niveau'),
-            'search' => $request->query->get('search'),
-            'competences' => $request->query->get('competences')
-        ];
+public function filterMissions(Request $request, MissionsRepository $missionRepository, MessagesRepository $messagesRepo): Response
+{
+    $user = $this->getUser();
+    $filters = [
+        'tjm' => $request->query->get('tjm'),
+        'niveau' => $request->query->get('niveau'),
+        'search' => $request->query->get('search'),
+        'competences' => $request->query->get('competences')
+    ];
 
-        // Si le champ des compétences contient des valeurs, on le transforme en un tableau
-        if (!empty($filters['competences'])) {
-            $filters['competences'] = array_map('trim', explode(',', $filters['competences']));
-        } else {
-            $filters['competences'] = [];
-        }
-
-        $missions = $missionRepository->findByFilters($filters);
-
-        return $this->render('website/freelance/mission/missions.html.twig', [
-            'missions' => $missions,
-        ]);
+    // Si le champ des compétences contient des valeurs, on le transforme en un tableau
+    if (!empty($filters['competences'])) {
+        $filters['competences'] = array_map('trim', explode(',', $filters['competences']));
+    } else {
+        $filters['competences'] = [];
     }
 
+    $missions = $missionRepository->findByFilters($filters);
+    $existingConversation = false;
+
+    foreach ($missions as $mission) {
+        $personel = $mission->getPersonel();
+        $userId = $personel ? $personel->getUser()->getId() : null;
+        $mission->userId = $userId; // Ajouter la clé userId à l'objet mission
+
+        if ($user && $userId) {
+            $existingConversation = $messagesRepo->getConversationIdBetweenUsers($user->getId(), $userId);
+            if ($existingConversation) {
+                break;
+            }
+        }
+    }
+
+    return $this->render('website/freelance/mission/missions.html.twig', [
+        'missions' => $missions,
+        'existingConversation' => $existingConversation,
+    ]);
+}
+
     #[Route('/missions/{id}/detail', name: 'mission_detail')]
-    public function detail($id, MissionsRepository $missionRepository)
+    public function detail($id, MissionsRepository $missionRepository): Response
     {
         // Récupérer la mission par son ID
         $mission = $missionRepository->find($id);
@@ -152,6 +188,4 @@ class MissionController extends AbstractController
             'mission' => $mission,
         ]);
     }
-
-
 }

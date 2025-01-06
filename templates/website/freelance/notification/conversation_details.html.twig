@@ -1,0 +1,46 @@
+{% extends 'website/freelance/layout/base.html.twig' %}
+
+{% block stylesheets %}
+    <link rel="stylesheet" href="{{ asset('css/style.css') }}">
+{% endblock %}
+
+{% block title %}Détails de la conversation{% endblock %}
+
+{% block body %}
+    <div class="container my-5">
+        <h1 class="text-center pb-5">Détails de la conversation</h1>
+        <!-- Retour button -->
+        <div class="mt-3">
+            <a href="{{ path('app_notificationindex') }}" class="btn btn-secondary">Retour</a>
+        </div>
+        {% if messages is defined and messages|length > 0 %}
+            <div class="conversation-container">
+                <div class="conversation">
+                    {% for message in messages %}
+                        <div class="message {% if message.sender == app.user %}sent{% else %}received{% endif %}">
+                            <p>{{ message.content }}</p>
+                            <small>{{ message.createdAt|date('d/m/Y H:i') }}</small>
+                        </div>
+                    {% endfor %}
+                </div>
+            </div>
+        {% else %}
+            <p class="text-center">Aucun message trouvé.</p>
+        {% endif %}
+
+        <!-- Message sending bar -->
+        <div class="message-send-bar mt-5">
+            <form action="{{ path('app_notificationsend_message') }}" method="post">
+                <div class="input-group">
+                    <textarea class="form-control" id="message" name="message" rows="1" placeholder="Écrire un message..." required></textarea>
+                    <input type="hidden" name="receiver_id" value="{{ receiverDetails.id }}">
+                    <input type="hidden" name="conversation_id" value="{{ conversationId }}">
+                    <button class="btn btn-primary" type="submit">Envoyer</button>
+                </div>
+            </form>
+        </div>
+
+
+    </div>
+    <link rel="stylesheet" href="{{ asset('css/style.css') }}">
+{% endblock %}
