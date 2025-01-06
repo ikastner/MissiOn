@@ -1,0 +1,38 @@
+{% extends 'website/admin/layout/base.html.twig' %}
+
+{% block title %}Profil Freelance{% endblock %}
+
+{% block body %}
+{% for message in app.flashes('success') %}
+    <div class="alert alert-success">{{ message }}</div>
+{% endfor %}
+
+{% for message in app.flashes('warning') %}
+    <div class="alert alert-warning">{{ message }}</div>
+{% endfor %}
+<div class="container mt-5">
+    <h1 class="mb-4">Profil</h1>
+
+    <div class="card mb-4">
+        <div class="card-body">
+            <h2 class="card-title">Informations personnelles</h2>
+            {% if app.user and is_granted('ROLE_PERSONNEL') %}
+            <ul class="list-group pb-2">
+                <li class="list-group-item"><strong>Nom :</strong> {{ app.user.personel.name }}</li>
+                <li class="list-group-item"><strong>Email :</strong> {{ app.user.email }}</li>
+                <li class="list-group-item"><strong>Entreprise :</strong> {{ app.user.personel.entreprise.name }}</li>
+            </ul>
+            {% else %}
+            <ul class="list-group pb-2">
+                <li class="list-group-item"><strong>Nom :</strong> {{ app.user.gestionnaire.name }}</li>
+                <li class="list-group-item"><strong>Email :</strong> {{ app.user.email }}</li>
+                <li class="list-group-item"><strong>Nom Entreprise :</strong> {{ app.user.gestionnaire.entreprise.name }}</li>
+                <li class="list-group-item"><strong>Adresse Entreprise :</strong> {{ app.user.gestionnaire.entreprise.adresse }}</li>
+                <li class="list-group-item"><strong>Contact Entreprise :</strong> {{ app.user.gestionnaire.entreprise.contact }}</li>
+            </ul>
+            {% endif %}
+            <a href="{{ path('admin_update_profile', {id: app.user.id}) }}" class="btn btn-primary">Modifier mes informations</a>
+        </div>
+    </div>
+
+{% endblock %}

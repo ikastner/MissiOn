@@ -1,0 +1,57 @@
+{% extends 'website/admin/layout/base.html.twig' %}
+
+{% block title %}Profil{% endblock %}
+
+{% block body %}
+
+<div class="card">
+    <div class="card-header text-center">
+        <h2>Modifier mes informations personnelles</h2>
+    </div>
+    <div class="card-body">
+        <form action="{{ path('admin_register_update_profile') }}" method="POST">
+            <div class="row">
+            {% if app.user and is_granted('ROLE_PERSONNEL') %}
+                <div class="col-md-6 mb-3">
+                    <label for="nom" class="form-label text-primary">Nom</label>
+                    <input type="text" class="form-control" id="nom" name="nom" placeholder="Votre nom" value="{{ app.user.personel.name }}">
+                </div>
+                <div class="col-md-6 mb-3">
+                    <label for="email" class="form-label text-primary">Email</label>
+                    <input type="email" class="form-control" id="email" name="email" placeholder="Votre email" value="{{ app.user.email }}">
+                </div>
+                <div class="col-md-6 mb-3">
+                    <label for="entreprise_nom" class="form-label text-primary">Nom de lentreprise</label>
+                    <input type="text" class="form-control" id="entreprise_nom" name="entreprise_nom" placeholder="Nom de l'entreprise" value="{{ app.user.personel.entreprise.name }}" disabled>
+                </div>
+            {% else %}
+                <div class="col-md-6 mb-3">
+                    <label for="nom" class="form-label text-primary">Nom</label>
+                    <input type="text" class="form-control" id="nom" name="nom" placeholder="Votre nom" value="{{ app.user.gestionnaire.name }}">
+                </div>
+                <div class="col-md-6 mb-3">
+                    <label for="email" class="form-label text-primary">Email</label>
+                    <input type="email" class="form-control" id="email" name="email" placeholder="Votre email" value="{{ app.user.email }}">
+                </div>
+                <div class="col-md-6 mb-3">
+                    <label for="entreprise_nom" class="form-label text-primary">Nom de lentreprise</label>
+                    <input type="text" class="form-control" id="entreprise_nom" name="entreprise_nom" placeholder="Nom de l'entreprise" value="{{ app.user.gestionnaire.entreprise.name }}">
+                </div>
+                <div class="col-md-6 mb-3">
+                    <label for="entreprise_adresse" class="form-label text-primary">Adresse de lentreprise</label>
+                    <input type="text" class="form-control" id="entreprise_adresse" name="entreprise_adresse" placeholder="Adresse de l'entreprise" value="{{ app.user.gestionnaire.entreprise.adresse }}">
+                </div>
+                <div class="col-md-6 mb-3">
+                    <label for="entreprise_contact" class="form-label text-primary">Contact de lentreprise</label>
+                    <input type="text" class="form-control" id="entreprise_contact" name="entreprise_contact" placeholder="Contact de l'entreprise" value="{{ app.user.gestionnaire.entreprise.contact }}">
+                </div>
+            {% endif %}
+            </div>
+            <div class="d-flex justify-content-end mt-4">
+                <button type="submit" class="btn btn-primary">Enregistrer</button>
+            </div>
+        </form>
+    </div>
+</div>
+
+{% endblock %}

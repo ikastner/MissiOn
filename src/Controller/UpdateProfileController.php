@@ -68,4 +68,71 @@ class UpdateProfileController extends AbstractController
         // Rediriger vers la page de profil (ou une autre page)
         return $this->redirectToRoute('freelance_profile');
     }
+
+
+    // Pour les admins
+    #[Route('/admin/profil', name: 'admin_profile')]
+    public function profil( EntityManagerInterface $entityManager): Response
+    {
+    
+        return $this->render('website/admin/profile/profile.html.twig', [
+        ]);
+    }
+
+    #[Route('/admin/modifier/profile', name: 'admin_update_profile')]
+    public function update_profil(): Response
+    {
+        return $this->render('website/admin/profile/update_profile.html.twig', [
+            
+        ]);
+    }
+
+    #[Route('/admin/modifier/information-personnel', name: 'admin_register_update_profile')]
+    public function admin_update_profil( Request $request, EntityManagerInterface $entityManager): Response
+    {
+        $user = $this->getUser();
+        if (!$user) {
+            throw $this->createAccessDeniedException('Vous devez être connecté pour modifier vos informations.');
+        }
+
+        if ($this->isGranted('ROLE_PERSONNEL')) {
+            $nom = $request->request->get('nom');
+            $email = $request->request->get('email');
+
+            $personel = $user->getPersonel();
+            $personel->setName($nom ?: $personel->getName()); // Conserve la valeur actuelle si le champ est vide
+            $personel->setEmail($email ?: $personel->getEmail());
+            $user->setEmail($email?: $user->getEmail());
+
+            $entityManager->persist($user);
+            $entityManager->persist($personel);
+        }
+        elseif ($this->isGranted('ROLE_GESTIONNAIRE')) {
+            $nom = $request->request->get('nom');
+            $email = $request->request->get('email');
+            $entreprise_nom = $request->request->get('entreprise_nom');
+            $entreprise_adresse = $request->request->get('entreprise_adresse');
+            $entreprise_contact = $request->request->get('entreprise_contact');
+
+            $gestionnaire = $user->getGestionnaire();
+            $gestionnaire->setName($nom?: $gestionnaire->getName());
+            $gestionnaire->setEmail($email?: $gestionnaire->getEmail());
+            $user->setEmail($email?: $user->getEmail());
+
+            $entreprise = $gestionnaire->getEntreprise();
+            $entreprise->setName($entreprise_nom?: $entreprise->getName());
+            $entreprise->setAdresse($entreprise_adresse?: $entreprise->getAdresse());
+            $entreprise->setContact($entreprise_contact?: $entreprise->getContact());
+
+            $entityManager->persist($user);
+            $entityManager->persist($gestionnaire);
+            $entityManager->persist($entreprise);
+        }
+
+        $entityManager->flush();
+
+        $this->addFlash('success', 'Vos informations ont été mises à jour avec succès.');
+        return $this->redirectToRoute('admin_profile');
+    
+    }
 }
