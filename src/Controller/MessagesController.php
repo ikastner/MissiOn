@@ -9,6 +9,7 @@ use App\Entity\Messages;
 use App\Entity\Personel;
 use App\Entity\User;
 use App\Repository\MessagesRepository;
+use App\Repository\UserRepository;
 use Doctrine\DBAL\Exception;
 use Doctrine\ORM\EntityManagerInterface;
 use Symfony\Bundle\FrameworkBundle\Controller\AbstractController;
@@ -118,56 +119,67 @@ class MessagesController extends AbstractController
 
 
 
-    #[Route('/send-message', name: 'send_message', methods: ['POST'])]
-    public function sendMessage(Request $request, EntityManagerInterface $entityManager, MessagesRepository $messageRepo): Response
-    {
-        $user = $this->getUser();
-
-        if (!$user) {
-            return $this->redirectToRoute('app_login'); // Redirection si non connecté
-        }
-
-        $content = $request->request->get('message');
-        $conversationId = $request->request->get('conversation_id');
-//        $roleId = $request->request->get('receiver_id'); // Assuming this is the role ID
-//
-//        // Get the user ID from the role ID
-//        $receiverUserId = $messageRepo->findUserIdByRoleId($roleId);
-//
-//        if (!$receiverUserId) {
-//            throw $this->createNotFoundException('Destinataire non trouvé: ' . $roleId);
-//        }
-        $receiverId = $messageRepo->findReceiverForConversation($conversationId, $user);
-
-
-
-
-        // Check if a conversation already exists between the sender and receiver
-        if (empty($conversationId)) {
-            $existingConversationId = $messageRepo->getConversationIdBetweenUsers($user->getId(), $receiverId);
-            if ($existingConversationId) {
-                $conversationId = $existingConversationId;
-            } else {
-                // Generate a new conversation ID if no existing conversation is found
-                $existingConversationIds = $messageRepo->findAllConversationIds();
-                do {
-                    $conversationId = random_int(100000, 999999);
-                } while (in_array($conversationId, $existingConversationIds));
-            }
-        }
-
-        $message = new Messages();
-        $message->setSender($user);
-        $message->setReceiver($receiverId);
-        $message->setContent($content);
-        $message->setCreatedAt(new \DateTime());
-        $message->setIsRead(false);
-        $message->setConversationId($conversationId);
-
-        $entityManager->persist($message);
-        $entityManager->flush();
-
-        return $this->redirectToRoute('app_notificationconversation_details', ['conversationId' => $conversationId]);
-    }
+     #[Route('/send-message', name: 'send_message', methods: ['POST'])]
+     public function sendMessage(Request $request, EntityManagerInterface $entityManager, MessagesRepository $messageRepo, UserRepository $userRepo): Response
+     {
+         $user = $this->getUser();
+     
+         if (!$user) {
+             return $this->redirectToRoute('app_login'); // Redirection si non connecté
+         }
+     
+         // Récupération des données de la requête
+         $content = $request->request->get('message');
+         $conversationId = $request->request->get('conversation_id');
+     
+         if ($conversationId) {
+             // Trouver l'ID du destinataire pour une conversation existante
+             $receiverId = $messageRepo->findReceiverForConversation($conversationId, $user);
+             if (!$receiverId) {
+                 throw $this->createNotFoundException("Aucun destinataire trouvé pour la conversation $conversationId.");
+             }
+         } else {
+             // Récupérer l'ID du destinataire à partir de la requête
+             $receiverId = $request->request->get('receiver_id'); // Assurez-vous que ce champ est inclus dans la requête
+             if (!$receiverId || !is_numeric($receiverId)) {
+                 throw new \InvalidArgumentException("L'ID du destinataire est manquant ou invalide.");
+             }
+     
+             // Vérifier si une conversation existe déjà entre les deux utilisateurs
+             $existingConversationId = $messageRepo->getConversationIdBetweenUsers($user->getId(), (int)$receiverId);
+             if ($existingConversationId) {
+                 $conversationId = $existingConversationId;
+             } else {
+                 // Générer un nouvel ID de conversation si aucune n'existe
+                 $existingConversationIds = $messageRepo->findAllConversationIds();
+                 do {
+                     $conversationId = random_int(100000, 999999);
+                 } while (in_array($conversationId, $existingConversationIds));
+             }
+         }
+     
+         // Convertir l'ID du destinataire en objet `User`
+         $receiver = $userRepo->find($receiverId);
+         if (!$receiver) {
+             throw $this->createNotFoundException("Utilisateur avec l'ID $receiverId non trouvé.");
+         }
+     
+         // Création du message
+         $message = new Messages();
+         $message->setSender($user);
+         $message->setReceiver($receiver); // Utiliser l'objet `User`
+         $message->setContent($content);
+         $message->setCreatedAt(new \DateTime());
+         $message->setIsRead(false);
+         $message->setConversationId($conversationId);
+     
+         // Persistance du message
+         $entityManager->persist($message);
+         $entityManager->flush();
+     
+         // Redirection vers les détails de la conversation
+         return $this->redirectToRoute('app_notificationconversation_details', ['conversationId' => $conversationId]);
+     }
+     
 }
 
