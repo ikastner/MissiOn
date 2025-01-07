@@ -4,18 +4,19 @@ namespace App\Controller;
 
 use App\Entity\Freelance;
 use App\Repository\FreelanceRepository;
+use App\Repository\MessagesRepository;
+use Doctrine\DBAL\Exception;
 use Doctrine\ORM\EntityManagerInterface;
 use Symfony\Bundle\FrameworkBundle\Controller\AbstractController;
 use Symfony\Bundle\SecurityBundle\Security;
 use Symfony\Component\HttpFoundation\Request;
 use Symfony\Component\HttpFoundation\Response;
-use Symfony\Component\Routing\Attribute\Route;
+use Symfony\Component\Routing\Annotation\Route;
 
 class WebsiteController extends AbstractController
 {
-
     #[Route('/', name: 'app_home')]
-    public function freelance_view():Response
+    public function freelance_view(): Response
     {
         return $this->render('/home/index.html.twig', [
             'controller_name' => 'WebsiteController',
@@ -40,9 +41,14 @@ class WebsiteController extends AbstractController
         ]);
     }
 
+    /**
+     * @throws Exception
+     */
     #[Route('/admin/find-freelance', name: 'app_find_freelance')]
-    public function findFreelance( Request $request, FreelanceRepository $freelanceRepository): Response
+    public function findFreelance(Request $request, FreelanceRepository $freelanceRepository, MessagesRepository $messagesRepo): Response
     {
+        $user = $this->getUser(); // Récupérer l'utilisateur connecté
+
         $filters = [
             'TJM' => $request->query->get('TJM'),
             'pays' => $request->query->get('pays'),
@@ -59,25 +65,39 @@ class WebsiteController extends AbstractController
         }
 
         $freelances = $freelanceRepository->findByFilters($filters);
+        $existingConversation = false;
+
+        foreach ($freelances as $freelance) {
+            $userId = $freelance->getUser()->getId();
+            $freelance->userId = $userId; // Ajouter la clé userId à l'objet freelance
+
+            if ($user && $userId) {
+                $existingConversation = $messagesRepo->getConversationIdBetweenUsers($user->getId(), $userId);
+                if ($existingConversation) {
+                    break;
+                }
+            }
+        }
 
         return $this->render('website/admin/find_freelance/search_freelance.html.twig', [
             'freelances' => $freelances,
+            'existingConversation' => $existingConversation,
         ]);
     }
 
-    // recupere l'utilisateur courrent 
+    // recupere l'utilisateur courrent
     public function someAction(Security $security): Response
     {
         $user = $this->getUser(); // Récupère l'utilisateur connecté
 
         if ($user) {
             $gestionnaire = $user->getGestionnaire();  // Si l'utilisateur est un gestionnaire
-            $personel = $user->getPersonel(); 
+            $personel = $user->getPersonel();
             $freelance = $user->getFreelance();
 
             $userName = $gestionnaire ? $gestionnaire->getName() :
-                        ($personel ? $personel->getName() :
-                        ($freelance ? $freelance->getName() : 'Utilisateur inconnu'));
+                ($personel ? $personel->getName() :
+                    ($freelance ? $freelance->getName() : 'Utilisateur inconnu'));
 
             return $this->render('website/admin/layout/base.html.twig', [
                 'user_name' => $userName,
@@ -98,5 +118,4 @@ class WebsiteController extends AbstractController
             'freelance' => $freelance,
         ]);
     }
-
 }

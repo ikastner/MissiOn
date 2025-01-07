@@ -1,12 +1,10 @@
 {% extends 'website/admin/layout/base.html.twig' %}
 
-
 {% block title %}Trouver des Freelances{% endblock %}
 
 {% block stylesheets %}
     {{ parent() }}
     <style>
-        {# body { font-family: Arial, sans-serif; background-color: #fff; margin: 0; padding: 0; } #}
         .freelance-wrapper { display: flex; max-width: 1400px; margin: 0 auto; padding: 10px; }
         .filters { width: 30%; padding: 10px; background-color: #fff; margin-right: 10px; }
         .content { width: 70%; padding-left: 10px; }
@@ -23,70 +21,129 @@
         .btn { padding: 8px 12px; border: none; border-radius: 4px; cursor: pointer; text-align: center; text-decoration: none; }
         .btn-invite { background-color: #28a745; color: white; }
         .btn-details { background-color: #e9e9e9; color: #333; }
-        /* Styles pour les filtres */
         .filters form { display: flex; flex-direction: column; gap: 10px; }
         .filters label { font-weight: bold; }
         .filters input, .filters select { width: 100%; padding: 8px; border: 1px solid #ddd; border-radius: 4px; }
+        .modal { display: none; position: fixed; z-index: 1; left: 0; top: 0; width: 100%; height: 100%; overflow: auto; background-color: rgb(0,0,0); background-color: rgba(0,0,0,0.4); }
+        .modal-content { background-color: #fefefe; margin: 15% auto; padding: 20px; border: 1px solid #888; width: 80%; max-width: 500px; }
+        .close { color: #aaa; float: right; font-size: 28px; font-weight: bold; }
+        .close:hover, .close:focus { color: black; text-decoration: none; cursor: pointer; }
     </style>
 {% endblock %}
 
 {% block body %}
-<div class="container freelance-wrapper">
-    <!-- Filters Section -->
-    <div class="filters">
-        <h2>Filtres</h2>
-        <form method="get" action="{{ path('app_find_freelance') }}">
-            <label for="TJM">TJM maximum :</label>
-            <input type="number" id="TJM" name="TJM" placeholder="Ex : 5000 €" value="{{ app.request.query.get('TJM') }}">
-
-            <label for="pays">Pays :</label>
-            <input type="text" id="pays" name="pays" placeholder="France" value="{{ app.request.query.get('pays') }}">
-
-            <label for="ville">Ville :</label>
-            <input type="text" id="ville" name="ville" placeholder="Paris" value="{{ app.request.query.get('ville') }}">
-
-            <label for="competences">Compétences requises :</label>
-            <input type="text" id="competences" name="competences" placeholder="Ex : Développement, Java" value="{{ app.request.query.get('competences') }}">
-
-            <button type="submit" class="btn btn-invite">Appliquer les filtres</button>
-        </form>
-    </div>
-
-    <!-- Content Section -->
-    <div class="content">
-        <h1>Parcourir les Freelances</h1>
-
-        <!-- Search Bar -->
-        <div class="search-bar">
+    <div class="container freelance-wrapper">
+        <!-- Filters Section -->
+        <div class="filters">
+            <h2>Filtres</h2>
             <form method="get" action="{{ path('app_find_freelance') }}">
-                <input type="text" class="search-input" name="search" placeholder="Rechercher des freelances..." value="{{ app.request.query.get('search') }}">
+                <label for="TJM">TJM maximum :</label>
+                <input type="number" id="TJM" name="TJM" placeholder="Ex : 5000 €" value="{{ app.request.query.get('TJM') }}">
+
+                <label for="pays">Pays :</label>
+                <input type="text" id="pays" name="pays" placeholder="France" value="{{ app.request.query.get('pays') }}">
+
+                <label for="ville">Ville :</label>
+                <input type="text" id="ville" name="ville" placeholder="Paris" value="{{ app.request.query.get('ville') }}">
+
+                <label for="competences">Compétences requises :</label>
+                <input type="text" id="competences" name="competences" placeholder="Ex : Développement, Java" value="{{ app.request.query.get('competences') }}">
+
+                <button type="submit" class="btn btn-invite">Appliquer les filtres</button>
             </form>
         </div>
 
-        <!-- Freelance List -->
-        {% if freelances is defined and freelances|length > 0 %}
-            <div class="freelance-list">
-                {% for freelance in freelances %}
-                    <div class="freelance-card">
-                        <div class="freelance-info">
-                            <h2>{{ freelance.nom }}</h2>
-                            <div class="rate">TJM : {{ freelance.TJM }} € / jour</div>
-                            <div class="location">{{ freelance.ville }}, {{ freelance.pays }}</div>
-                            {% if freelance.biographie %}
-                                <div class="biography">{{ freelance.biographie|slice(0, 100) }}{% if freelance.biographie|length > 100 %}...{% endif %}</div>
-                            {% endif %}
-                        </div>
-                        <div class="freelance-actions">
-                            <a href="#" class="btn btn-invite">Inviter à l'emploi</a>
-                            <a href="{{ path('detail_freelance_profile', {id: freelance.id}) }}" class="btn btn-apply">Voir le profil</a>
-                        </div>
-                    </div>
-                {% endfor %}
-            </div>
-        {% else %}
-            <p>Aucun freelance disponible pour le moment.</p>
-        {% endif %}
-    </div>
-</div>
-{% endblock %}
+        <!-- Content Section -->
+        <div class="content">
+            <h1>Parcourir les Freelances</h1>
 
+            <!-- Search Bar -->
+            <div class="search-bar">
+                <form method="get" action="{{ path('app_find_freelance') }}">
+                    <input type="text" class="search-input" name="search" placeholder="Rechercher des freelances..." value="{{ app.request.query.get('search') }}">
+                </form>
+            </div>
+
+            <!-- Freelance List -->
+            {% if freelances is defined and freelances|length > 0 %}
+                <div class="freelance-list">
+                    {% for freelance in freelances %}
+                        <div class="freelance-card">
+                            <div class="freelance-info">
+                                <h2>{{ freelance.nom }}</h2>
+                                <div class="rate">TJM : {{ freelance.TJM }} € / jour</div>
+                                <div class="location">{{ freelance.ville }}, {{ freelance.pays }}</div>
+                                {% if freelance.biographie %}
+                                    <div class="biography">{{ freelance.biographie|slice(0, 100) }}{% if freelance.biographie|length > 100 %}...{% endif %}</div>
+                                {% endif %}
+                            </div>
+                            <div class="freelance-actions">
+                                <button class="btn btn-invite contact-freelance" data-freelance-id="{{ freelance.id }}" data-user-id="{{ freelance.getUser().getId() }}">Contacter le freelance</button>
+                                <a href="{{ path('detail_freelance_profile', {id: freelance.id}) }}" class="btn btn-details">Voir le profil</a>
+                            </div>
+                        </div>
+                    {% endfor %}
+                </div>
+            {% else %}
+                <p>Aucun freelance disponible pour le moment.</p>
+            {% endif %}
+        </div>
+    </div>
+
+    <!-- Modal -->
+    <div id="contactModal" class="modal">
+        <div class="modal-content">
+            <span class="close">&times;</span>
+            <h2>Envoyer un message au freelance</h2>
+            <p id="userIdDisplay">ID de l'utilisateur : </p>
+
+            <form action="{{ path('app_notificationsend_message') }}" method="post">
+                <div class="input-group">
+                    <textarea class="form-control" id="message" name="message" rows="4" placeholder="Écrire un message..." required></textarea>
+                    <input type="hidden" id="receiver_id" name="receiver_id" value="">
+                    <input type="hidden" id="conversation_id" name="conversation_id" value="">
+                    <input type="hidden" id="existing_conversation" name="existing_conversation" value="{{ existingConversation ? 'true' : 'false' }}">
+                    <button class="btn btn-primary" type="submit">Envoyer</button>
+                </div>
+            </form>
+        </div>
+    </div>
+
+    <script>
+        document.addEventListener('DOMContentLoaded', function() {
+            var modal = document.getElementById("contactModal");
+            var span = document.getElementsByClassName("close")[0];
+            var userIdDisplay = document.getElementById("userIdDisplay");
+
+            document.querySelectorAll('.contact-freelance').forEach(function(button) {
+                button.onclick = function() {
+                    var userId = this.getAttribute('data-user-id');
+                    document.getElementById('receiver_id').value = userId;
+                    userIdDisplay.textContent = "ID de l'utilisateur : " + userId;
+                    modal.style.display = "block";
+                };
+            });
+
+            span.onclick = function() {
+                modal.style.display = "none";
+            };
+
+            window.onclick = function(event) {
+                if (event.target == modal) {
+                    modal.style.display = "none";
+                }
+            };
+
+            // Add event listener to the form submission
+            document.querySelector('form[action="{{ path('app_notificationsend_message') }}"]').onsubmit = function(event) {
+                var existingConversation = document.getElementById('existing_conversation').value;
+                if (existingConversation === 'true') {
+                    var confirmSend = confirm("Il y a déjà une conversation existante. Voulez-vous vraiment envoyer ce message ?");
+                    if (!confirmSend) {
+                        event.preventDefault();
+                    }
+                }
+            };
+        });
+    </script>
+{% endblock %}
