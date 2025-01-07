@@ -79,7 +79,7 @@
                             </div>
                             <div class="freelance-actions">
                                 <button class="btn btn-invite contact-freelance" data-freelance-id="{{ freelance.id }}" data-user-id="{{ freelance.getUser().getId() }}">Contacter le freelance</button>
-                                <a href="{{ path('detail_freelance_profile', {id: freelance.id}) }}" class="btn btn-details">Voir le profil</a>
+                                <a href="{{ path('detail_freelance_profile_detail', {id: freelance.id}) }}" class="btn btn-details">Voir le profil</a>
                             </div>
                         </div>
                     {% endfor %}

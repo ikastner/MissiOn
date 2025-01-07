@@ -4,15 +4,31 @@
     <meta charset="UTF-8">
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
     <title>{% block title %}Welcome!{% endblock %}</title>
-    {# <link rel="icon" href="data:image/svg+xml,<svg xmlns=%22http://www.w3.org/2000/svg%22 viewBox=%220 0 128 128%22><text y=%221.2em%22 font-size=%2296%22>⚫️</text><text y=%221.3em%22 x=%220.2em%22 font-size=%2276%22 fill=%22%23fff%22>sf</text></svg>"> #}
     <link href="https://cdn.jsdelivr.net/npm/bootstrap@5.3.3/dist/css/bootstrap.min.css" rel="stylesheet">
     <link href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.0.0-beta3/css/all.min.css" rel="stylesheet">
 
     {% block stylesheets %}
-    {# {{ parent() }} #}
-    <link rel="stylesheet" href="{{ asset('css/media.css') }}">
+        <link rel="stylesheet" href="{{ asset('css/media.css') }}">
+        <link rel="stylesheet" href="{{ asset('css/styleHome.css') }}">
+        <link href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.0.0-beta3/css/all.min.css" rel="stylesheet">
+        <style>
+            .btn-square {
+                display: inline-block;
+                padding: 10px 20px;
+                color: white;
+                background-color: green;
+                border: 2px solid green;
+                border-radius: 0;
+                text-align: center;
+                text-decoration: none;
+                border-radius: 30px;
+            }
+            .btn-square:hover {
+                background-color: darkgreen;
+                border-color: darkgreen;
+            }
+        </style>
     {% endblock %}
-        
 
     {% block javascripts %}{% endblock %}
 </head>
@@ -20,18 +36,135 @@
 
 <nav class="navbar navbar-expand-lg navbar-light bg-light shadow-sm">
     <div class="container-fluid">
-        <!-- Logo MissiOn à gauche -->
+        <!-- Logo MissiOn -->
         <a class="navbar-brand" href="/">MissiOn</a>
 
-        <!-- Inscription et connexion à droite -->
-        <ul class="navbar-nav ms-auto">
-            <li class="nav-item">
-                <a class="nav-link" href="/choice/register">S'inscrire</a>
-            </li>
-            <li class="nav-item">
-                <a class="btn btn-login" href="/login">Se connecter</a>
-            </li>
-        </ul>
+        <!-- Bouton pour les mobiles -->
+        <button class="navbar-toggler" type="button" data-bs-toggle="collapse" data-bs-target="#navbarContent" aria-controls="navbarContent" aria-expanded="false" aria-label="Toggle navigation">
+            <span class="navbar-toggler-icon"></span>
+        </button>
+
+        <!-- Contenu de la navbar -->
+        <div class="collapse navbar-collapse justify-content-center" id="navbarContent">
+            <!-- Menus principaux -->
+            <ul class="navbar-nav me-auto mb-2 mb-lg-0">
+                <li class="nav-item dropdown">
+                    <a class="nav-link dropdown-toggle" href="#" id="navbarDropdownTalents" role="button" data-bs-toggle="dropdown" aria-expanded="false">
+                        Trouver des talents
+                    </a>
+                    <div class="dropdown-menu p-3" aria-labelledby="navbarDropdownTalents">
+                        <div class="row">
+                            <!-- Colonne 1 -->
+                            <div class="col-md-4 dropdown-column">
+                                <div class="mb-3">
+                                    <a href="{{ path('app_browse_freelances') }}" class="highlight-link">Rechercher des talents</a>
+                                </div>
+                            </div>
+                        </div>
+                    </div>
+                </li>
+
+                <li class="nav-item dropdown">
+                    <a class="nav-link dropdown-toggle" href="#" id="navbarDropdownTravail" role="button" data-bs-toggle="dropdown" aria-expanded="false">
+                        Trouver du travail
+                    </a>
+                    <div class="dropdown-menu p-3" aria-labelledby="navbarDropdownTravail">
+                        <div class="row">
+                            <!-- Colonne 1 -->
+                            <div class="col-md-4 dropdown-column">
+                                <div class="mb-3">
+                                    <a href="#" class="highlight-link">Rechercher des emplois</a>
+                                </div>
+                            </div>
+                        </div>
+                    </div>
+                </li>
+
+                <li class="nav-item dropdown">
+                    <a class="nav-link dropdown-toggle" href="#" id="navbarDropdownWhy" role="button" data-bs-toggle="dropdown" aria-expanded="false">
+                        Pourquoi MissiOn
+                    </a>
+                    <div class="dropdown-menu p-3" aria-labelledby="navbarDropdownWhy">
+                        <div class="row">
+                            <div class="col-md-4 dropdown-column">
+                                <a href="#" class="highlight-link">Notre mission</a>
+                                <br><a href="#">Valeurs de l'entreprise</a>
+                            </div>
+                            <div class="col-md-4 dropdown-column">
+                                <a href="#" class="highlight-link">Nos services</a>
+                                <br><a href="#">Solutions innovantes</a>
+                            </div>
+                            <div class="col-md-4 dropdown-column">
+                                <a href="#" class="highlight-link">Notre équipe</a>
+                                <br><a href="#">Profils des membres</a>
+                            </div>
+                        </div>
+                    </div>
+                </li>
+            </ul>
+
+            <!-- Formulaire de recherche -->
+            <form class="d-flex me-2">
+                <div class="input-group">
+                    <span class="input-group-text bg-white border-end-0">
+                        <i class="fas fa-search text-muted"></i>
+                    </span>
+                    <input class="form-control border-start-0" type="search" placeholder="Search" aria-label="Search">
+                    <select class="form-select" style="max-width: 120px;">
+                        <option value="talent">Talent</option>
+                        <option value="projets">Projets</option>
+                        <option value="emplois">Emplois</option>
+                    </select>
+                    <button class="btn btn-search" type="submit">Rechercher</button>
+                </div>
+            </form>
+
+            <!-- Utilisateur connecté ou non -->
+            <ul class="navbar-nav ms-auto">
+                {% if app.user %}
+                    <li class="nav-item">
+                        <p class="nav-link">Bienvenue, {{ app.user.email }}</p>
+                    </li>
+                    {% if 'ROLE_PERSONNEL' in app.user.roles %}
+                        <li class="nav-item">
+                            <a class="nav-link btn-square" href="{{ path('app_admin') }}">
+                                <i class="fas fa-user-tie"></i>
+                            </a>
+                        </li>
+                    {% elseif 'ROLE_FREELANCE' in app.user.roles %}
+                        <li class="nav-item">
+                            <a class="nav-link btn-square" href="{{ path('freelance_profile') }}">
+                                <i class="fas fa-briefcase"></i>
+                            </a>
+                        </li>
+                    {% elseif 'ROLE_GESTIONNAIRE' in app.user.roles %}
+                        <li class="nav-item">
+                            <a class="nav-link btn-square" href="{{ path('app_admin') }}">
+                                <i class="fas fa-user-cog"></i>
+                            </a>
+                        </li>
+                    {% else %}
+                        <li class="nav-item">
+                            <a class="nav-link btn-square" href="{{ path('default_dashboard') }}">
+                                <i class="fas fa-tachometer-alt"></i>
+                            </a>
+                        </li>
+                    {% endif %}
+                    <li class="nav-item">
+                        <a class="btn btn-logout" href="{{ path('app_logout') }}">
+                            <i class="fas fa-sign-out-alt"></i> Logout
+                        </a>
+                    </li>
+                {% else %}
+                    <li class="nav-item">
+                        <a class="nav-link" href="/choice/register">S'inscrire</a>
+                    </li>
+                    <li class="nav-item">
+                        <a class="btn btn-login" href="/login">Se connecter</a>
+                    </li>
+                {% endif %}
+            </ul>
+        </div>
     </div>
 </nav>
 

@@ -33,6 +33,8 @@ class WebsiteController extends AbstractController
         ]);
     }
 
+
+
     #[Route('/admin', name: 'app_admin')]
     public function admin(): Response
     {
@@ -115,6 +117,17 @@ class WebsiteController extends AbstractController
         $freelance = $freelanceRepository->find($id);
 
         return $this->render('website/admin/find_freelance/profile_freelance.html.twig', [
+            'freelance' => $freelance,
+        ]);
+    }
+
+    #[Route('/freelance/{id}/profile/detail', name: 'freelance_profile_detail')]
+    public function detailProfile($id, FreelanceRepository $freelanceRepository)
+    {
+        // Récupérer la mission par son ID
+        $freelance = $freelanceRepository->find($id);
+
+        return $this->render('website/profile_freelance.html.twig', [
             'freelance' => $freelance,
         ]);
     }
