@@ -56,8 +56,21 @@ class MessagesController extends AbstractController
             $conversation['receiverEmail'] = $receiver->getEmail(); // Add receiver email to conversation data
             $conversation['lastMessage'] = $messagesRepo->findLastMessageForConversation($conversation['conversationId']); // Add last message to conversation data
             $lastMessageDate = $messagesRepo->findLastMessageForConversationCreatedAt($conversation['conversationId']);
-            $conversation['lastMessageDate'] = $lastMessageDate ? (new \DateTime($lastMessageDate))->format('d/m/Y H:i') : null;
-
+        
+            if ($lastMessageDate) {
+                // Conversion de la chaîne en utilisant le format d/m/Y H:i
+                $dateTime = \DateTime::createFromFormat('d/m/Y H:i', $lastMessageDate);
+        
+                if ($dateTime) {
+                    // Si la conversion est réussit, on formate
+                    $conversation['lastMessageDate'] = $dateTime->format('Y-m-d H:i:s');
+                } else {
+                    // Si la chaîne ne correspond pas au format, on met null
+                    $conversation['lastMessageDate'] = null;
+                }
+            } else {
+                $conversation['lastMessageDate'] = null; // Pas de date trouvée
+            }
         }
 
         $role = $messagesRepo->getRoleCurrentUser($user);

@@ -23,25 +23,15 @@ class WebsiteController extends AbstractController
         ]);
     }
 
-    #[Route('/parcourir-freelances', name: 'app_browse_freelances')]
-    public function browseFreelances(EntityManagerInterface $entityManager): Response
-    {
-        $freelances = $entityManager->getRepository(Freelance::class)->findAll();
-
-        return $this->render('website/browse_freelances.html.twig', [
-            'freelances' => $freelances,
-        ]);
-    }
 
 
-
-    #[Route('/admin', name: 'app_admin')]
-    public function admin(): Response
-    {
-        return $this->render('website/admin/index.html.twig', [
-            'controller_name' => 'WebsiteController',
-        ]);
-    }
+    // #[Route('/admin', name: 'app_admin')]
+    // public function admin(): Response
+    // {
+    //     return $this->render('website/admin/index.html.twig', [
+    //         'controller_name' => 'WebsiteController',
+    //     ]);
+    // }
 
     /**
      * @throws Exception
@@ -71,7 +61,7 @@ class WebsiteController extends AbstractController
 
         foreach ($freelances as $freelance) {
             $userId = $freelance->getUser()->getId();
-            $freelance->userId = $userId; // Ajouter la clé userId à l'objet freelance
+            $freelance->userId = $userId; 
 
             if ($user && $userId) {
                 $existingConversation = $messagesRepo->getConversationIdBetweenUsers($user->getId(), $userId);
@@ -129,6 +119,31 @@ class WebsiteController extends AbstractController
 
         return $this->render('website/profile_freelance.html.twig', [
             'freelance' => $freelance,
+        ]);
+    }
+
+    #[Route('/parcourir-freelance', name: 'app_browse_freelances')]
+    public function browseFreelance(Request $request, FreelanceRepository $freelanceRepository): Response
+    {
+        $filters = [
+            'TJM' => $request->query->get('TJM'),
+            'pays' => $request->query->get('pays'),
+            'ville' => $request->query->get('ville'),
+            'search' => $request->query->get('search'),
+            'competences' => $request->query->get('competences')
+        ];
+
+        // Si le champ des compétences contient des valeurs, on le transforme en un tableau
+        if (!empty($filters['competences'])) {
+            $filters['competences'] = array_map('trim', explode(',', $filters['competences']));
+        } else {
+            $filters['competences'] = [];
+        }
+
+        $freelances = $freelanceRepository->findByFilters($filters);
+
+        return $this->render('website/browse_freelances.html.twig', [
+            'freelances' => $freelances,
         ]);
     }
 }

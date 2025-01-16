@@ -127,7 +127,7 @@
                     </li>
                     {% if 'ROLE_PERSONNEL' in app.user.roles %}
                         <li class="nav-item">
-                            <a class="nav-link btn-square" href="{{ path('app_admin') }}">
+                            <a class="nav-link btn-square" href="{{ path('admin_profile') }}">
                                 <i class="fas fa-user-tie"></i>
                             </a>
                         </li>
@@ -139,7 +139,7 @@
                         </li>
                     {% elseif 'ROLE_GESTIONNAIRE' in app.user.roles %}
                         <li class="nav-item">
-                            <a class="nav-link btn-square" href="{{ path('app_admin') }}">
+                            <a class="nav-link btn-square" href="{{ path('admin_profile') }}">
                                 <i class="fas fa-user-cog"></i>
                             </a>
                         </li>

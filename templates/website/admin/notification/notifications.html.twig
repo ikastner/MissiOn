@@ -24,7 +24,14 @@
                         <div>
                             <h5 class="mb-1">{{ conversation.receiverEmail }}</h5>
                             <small class="text-muted">Dernier message : {{ conversation.lastMessage|default('Aucun') }}</small>
-                            <small>{{ conversation.lastMessageDate|date('d/m/Y H:i') }}</small>
+                            <small class="text-muted">
+   
+    {% if conversation.lastMessageDate %}
+        {{ conversation.lastMessageDate|date('d/m/Y H:i') }}
+    {% else %}
+        Aucun
+    {% endif %}
+</small>
                         </div>
                         <div class="d-flex align-items-center">
                             {% if conversation.unreadCount > 0 %}

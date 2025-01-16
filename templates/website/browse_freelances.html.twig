@@ -34,20 +34,20 @@
     <div class="freelance-wrapper">
         <div class="filters">
             <h2>Filtres</h2>
-            <form>
-                <label for="tjm">TJM maximum :</label>
-                <input type="number" id="tjm" name="tjm">
+            <form method="get" action="{{ path('app_browse_freelances') }}">
+                <label for="TJM">TJM maximum :</label>
+                <input type="number" id="TJM" name="TJM" placeholder="Ex : 5000 €" value="{{ app.request.query.get('TJM') }}">
 
                 <label for="pays">Pays :</label>
-                <select id="pays" name="pays">
-                    <option value="">Tous</option>
-                    <!-- Ajoutez les options de pays -->
-                </select>
+                <input type="text" id="pays" name="pays" placeholder="France" value="{{ app.request.query.get('pays') }}">
 
-                <label for="competences">Compétences :</label>
-                <input type="text" id="competences" name="competences">
+                <label for="ville">Ville :</label>
+                <input type="text" id="ville" name="ville" placeholder="Paris" value="{{ app.request.query.get('ville') }}">
 
-                <button type="submit" class="btn">Appliquer les filtres</button>
+                <label for="competences">Compétences requises :</label>
+                <input type="text" id="competences" name="competences" placeholder="Ex : Développement, Java" value="{{ app.request.query.get('competences') }}">
+
+                <button type="submit" class="btn btn-invite">Appliquer les filtres</button>
             </form>
         </div>
 
@@ -57,7 +57,9 @@
             <h1>Parcourir les Freelances</h1>
 
             <div class="search-bar">
-                <input type="text" class="search-input" placeholder="Rechercher des freelances...">
+                <form method="get" action="{{ path('app_browse_freelances') }}">
+                    <input type="text" class="search-input" name="search" placeholder="Rechercher des freelances..." value="{{ app.request.query.get('search') }}">
+                </form>
             </div>
 
             {% if freelances is defined and freelances|length > 0 %}

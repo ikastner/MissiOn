@@ -6,13 +6,13 @@
     <section class="container-fluid hero-section text-white d-flex flex-column justify-content-center align-items-center">
         <h1 class="display-4 fw-bold">Trouvez les meilleurs freelances</h1>
         <p class="lead mb-4">Connectez-vous avec des experts en développement, design, marketing, et bien plus encore.</p>
-        <form class="d-flex w-50">
-            <input class="form-control me-2" type="search" placeholder="Essayez 'Java','Consultant Marketing'..." aria-label="Search">
-            <input class="form-control me-2" type="search" placeholder="Lieu de la mission (ex: Paris, Lyon...)" aria-label="Search">
+        <form class="d-flex w-50" action="{{ path('app_browse_freelances') }}">
+            <input class="form-control me-2" type="text" id="competences" name="competences" placeholder="Ex : Développement, Java, Consultant Marketing" value="{{ app.request.query.get('competences') }}">
+            <input class="form-control me-2" type="text" id="ville" name="ville" placeholder="Ex: Paris, Lyon, ...." value="{{ app.request.query.get('ville') }}">
             <button class="btn btn-primary" type="submit">Trouver un freelance</button>
-        </form>
+        </form>                
     </section>
-
+                
     <section class="container my-5">
         <h2 class="text-center mb-4">Pourquoi choisir MissiOn?</h2>
         <div class="row text-center">
